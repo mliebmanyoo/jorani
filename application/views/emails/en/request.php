@@ -31,7 +31,7 @@
     </head>
     <body>
         <h3>{Title}</h3>
-        {Firstname} {Lastname} requests a leave. Below, the <a href="{BaseUrl}leaves/{LeaveId}">details</a> :
+        {Firstname} {Lastname} requested time off. See the <a href="{BaseUrl}leaves/{LeaveId}">details</a> below.
         <table border="0">
             <tr>
                 <td>From &nbsp;</td><td>{StartDate}&nbsp;({StartDateType})</td>
@@ -56,7 +56,7 @@
             </tr>
         </table>
         <br />
-        You can check the <a href="{BaseUrl}requests/counters/{UserId}">leave balance</a> before validating the leave request.
+        You can check the <a href="{BaseUrl}requests/counters/{UserId}">leave balance</a> before approving the time off request.
         <hr>
         <h5>*** This is an automatically generated message, please do not reply to this message ***</h5>
     </body>
