@@ -381,20 +381,20 @@ $config['proxy_ips'] = '';
 
 //____________________________________________________________________________
 //default email from
-$config['from_mail'] = 'do.not@reply.me';
+$config['from_mail'] = 'noreply@yangaroo.com';
 $config['from_name'] = 'Jorani';
 $config['subject_prefix'] = '[Jorani] ';
 
 //____________________________________________________________________________
 //Password minimal length
-$config['password_length'] = 8;
+$config['password_length'] = 6;
 //Default role id (e.g. 2 for user)
 $config['default_role_id'] = 2;
 
 //____________________________________________________________________________
 //Set this value to TRUE if you want to create leaves at status requested instead of planned
-$config['leave_status_requested'] = FALSE;
-$config['default_leave_type'] = FALSE;      //Set this value with the default leave type identifier (integer).
+$config['leave_status_requested'] = TRUE;
+$config['default_leave_type'] = 0;      //Set this value with the default leave type identifier (integer).
 
 //Create a leave request / Allow overwrite of the duration
 $config['disable_edit_leave_duration'] = FALSE;             //Switch to read-only (the duration of leave is computed)
@@ -408,7 +408,7 @@ $config['edit_rejected_requests'] = FALSE;
 
 //____________________________________________________________________________
 //Set this value to TRUE if you want to allow manager to create leave requests in behalf of their collaborators
-$config['requests_by_manager'] = FALSE;
+$config['requests_by_manager'] = TRUE;
 
 //____________________________________________________________________________
 //List of available languages. If you limit this list to one language, the list of available languages will be hidden from the login form
@@ -446,7 +446,7 @@ $config['oauth2_client_secret'] = '';
 //____________________________________________________________________________
 //Enable public ICS feeds (global calendar, contract, personal information)
 $config['ics_enabled'] = TRUE;
-$config['default_timezone'] = 'Europe/Paris';
+$config['default_timezone'] = 'America/Toronto';
 
 //____________________________________________________________________________
 //Enable public access for tabular and global calendar
