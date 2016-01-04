@@ -387,7 +387,7 @@ $config['subject_prefix'] = '[Jorani] ';
 
 //____________________________________________________________________________
 //User manangment
-$config['disable_capitalization'] = FALSE;    //Set this value to TRUE if you want to disable the capitalization of lastname
+$config['disable_capitalization'] = TRUE;    //Set this value to TRUE if you want to disable the capitalization of lastname
 $config['password_length'] = 8;                    //Password minimal length
 $config['default_role_id'] = 2;                     //Default role id (e.g. 2 for user)
 
