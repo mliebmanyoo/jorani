@@ -293,7 +293,6 @@ if ($language_code != 'en') { ?>
                 $("#lastname").val().toLowerCase());            
         });
         $("#lastname").change(function() {
-            $("#lastname").val($("#lastname").val().toUpperCase());
             $("#login").val($("#firstname").val().charAt(0).toLowerCase() +
                 $("#lastname").val().toLowerCase());            
         });

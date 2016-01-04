@@ -37,7 +37,7 @@ $lang['menu_hr_report_leaves'] = 'Leave requests';
 
 $lang['menu_validation_title'] = 'Validation';
 $lang['menu_validation_delegations'] = 'Delegations';
-$lang['menu_validation_collaborators'] = 'My collaborators';
+$lang['menu_validation_collaborators'] = 'My subordinates';
 $lang['menu_validation_leaves'] = 'Leaves';
 $lang['menu_validation_overtime'] = 'Overtime';
 
@@ -55,7 +55,7 @@ $lang['menu_calendar_title'] = 'Calendars';
 $lang['menu_calendar_year'] = 'Yearly calendar';
 $lang['menu_calendar_individual'] = 'My calendar';
 $lang['menu_calendar_workmates'] = 'My workmates';
-$lang['menu_calendar_collaborators'] = 'My collaborators';
+$lang['menu_calendar_collaborators'] = 'My subordinates';
 $lang['menu_calendar_department'] = 'Department';
 $lang['menu_calendar_organization'] = 'Global';
 $lang['menu_calendar_tabular'] = 'Tabular';
