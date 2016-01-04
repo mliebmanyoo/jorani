@@ -1,7 +1,7 @@
 <?php
 /**
  * This view allows to configure the non-working days for a year and a given contract.
- * @copyright  Copyright (c) 2014-2015 Benjamin BALET
+ * @copyright  Copyright (c) 2014-2016 Benjamin BALET
  * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.2.0
@@ -41,9 +41,9 @@ padding-left:10px;
 }
 </style>
 
-<?php echo $flash_partial_view;?>
-
 <h2><?php echo lang('contract_calendar_title');?> <span class="muted"><?php echo $contract_name; ?></span>&nbsp;<?php echo $help;?></h2>
+
+<?php echo $flash_partial_view;?>
 
 <div class="row-fluid">
     <div class="span3">

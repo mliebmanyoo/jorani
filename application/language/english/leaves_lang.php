@@ -1,7 +1,7 @@
 <?php
 /**
  * Translation file
- * @copyright  Copyright (c) 2014-2015 Benjamin BALET
+ * @copyright  Copyright (c) 2014-2016 Benjamin BALET
  * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.1.0
@@ -37,9 +37,6 @@ $lang['leaves_index_popup_delete_message'] = 'You are about to delete one leave 
 $lang['leaves_index_popup_delete_question'] = 'Do you want to proceed?';
 $lang['leaves_index_popup_delete_button_yes'] = 'Yes';
 $lang['leaves_index_popup_delete_button_no'] = 'No';
-
-$lang['leaves_date_type_morning'] = 'Morning';
-$lang['leaves_date_type_afternoon'] = 'Afternoon';
 
 $lang['leaves_create_title'] = 'Submit a leave request';
 $lang['leaves_create_field_start'] = 'Start Date';

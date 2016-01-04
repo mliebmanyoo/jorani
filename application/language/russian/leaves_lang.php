@@ -1,7 +1,7 @@
 <?php
 /**
  * Translation file
- * @copyright  Copyright (c) 2014-2015 Benjamin BALET
+ * @copyright  Copyright (c) 2014-2016 Benjamin BALET
  * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.4.2
@@ -38,9 +38,6 @@ $lang['leaves_index_popup_delete_message'] = 'Вы собираетесь уда
 $lang['leaves_index_popup_delete_question'] = 'Продолжить?';
 $lang['leaves_index_popup_delete_button_yes'] = 'Да';
 $lang['leaves_index_popup_delete_button_no'] = 'Нет';
-
-$lang['leaves_date_type_morning'] = 'Утро';
-$lang['leaves_date_type_afternoon'] = 'После полудня';
 
 $lang['leaves_create_title'] = 'Отправить заявление на отпуск';
 $lang['leaves_create_field_start'] = 'Дата начала';

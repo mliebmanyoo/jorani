@@ -1,7 +1,7 @@
 <?php
 /**
  * Translation file
- * @copyright  Copyright (c) 2014-2015 Benjamin BALET
+ * @copyright  Copyright (c) 2014-2016 Benjamin BALET
  * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.1.0
@@ -37,9 +37,6 @@ $lang['leaves_index_popup_delete_message'] = 'Vous êtes sur le point de supprim
 $lang['leaves_index_popup_delete_question'] = 'Voulez-vous continuer ?';
 $lang['leaves_index_popup_delete_button_yes'] = 'Oui';
 $lang['leaves_index_popup_delete_button_no'] = 'Non';
-
-$lang['leaves_date_type_morning'] = 'Matin';
-$lang['leaves_date_type_afternoon'] = 'Après-midi';
 
 $lang['leaves_create_title'] = 'Créer une nouvelle demande';
 $lang['leaves_create_field_start'] = 'Date de début';

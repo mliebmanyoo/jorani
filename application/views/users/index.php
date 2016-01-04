@@ -1,7 +1,7 @@
 <?php 
 /**
  * This view displays the list of users.
- * @copyright  Copyright (c) 2014-2015 Benjamin BALET
+ * @copyright  Copyright (c) 2014-2016 Benjamin BALET
  * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.1.0
@@ -10,10 +10,10 @@
 
 <div class="row-fluid">
     <div class="span12">
-
-<?php echo $flash_partial_view;?>
         
 <h2><?php echo lang('users_index_title');?><?php echo $help;?></h2>
+
+<?php echo $flash_partial_view;?>
 
 <table cellpadding="0" cellspacing="0" border="0" class="display" id="users" width="100%">
     <thead>
@@ -67,7 +67,7 @@
       &nbsp;
       <a href="<?php echo base_url();?>users/create" class="btn btn-primary"><i class="icon-plus-sign icon-white"></i>&nbsp;<?php echo lang('users_index_button_create_user');?></a>
       &nbsp;
-      <!--<a href="<?php echo base_url();?>users/import" class="btn btn-primary" data-target="#frmImportUsers" data-toggle="modal"><i class="icon-arrow-up icon-white"></i>&nbsp;<?php echo lang('users_index_button_import_user');?></a><//-->
+      <!--<a href="#" class="btn btn-primary" data-target="#frmImportUsers" data-toggle="modal"><i class="fa fa-upload"></i>&nbsp;<?php echo lang('users_index_button_import_user');?></a>//-->
     </div>
 </div>
 
@@ -105,23 +105,31 @@
 </div>
 
 <div id="frmImportUsers" class="modal hide fade">
+    
     <div class="modal-header">
         <a href="#" onclick="$('#frmImportUsers').modal('hide');" class="close">&times;</a>
-         <h3><?php echo lang('users_index_button_export');?></h3>
+         <h3><?php echo lang('users_index_popup_import_title');?></h3>
     </div>
     <div class="modal-body">
-        <img src="<?php echo base_url();?>assets/images/loading.gif">
+        <?php echo form_open_multipart('users/import');?>
+            <label for="importFile"><?php echo lang('users_index_popup_field_filename');?>
+            <input type="file" name="importFile" size="20" />
+            </label>
+            <input class="btn btn-primary" type="submit" value="<?php echo lang('OK');?>" />
+        </form>
     </div>
     <div class="modal-footer">
-        <a href="#" onclick="$('#frmImportUsers').modal('hide');" class="btn secondary"><?php echo lang('users_index_button_export');?></a>
+        <a href="#" onclick="$('#frmImportUsers').modal('hide');" class="btn btn-danger"><?php echo lang('Cancel');?></a>
     </div>
+
 </div>
 
 <script type="text/javascript">
 $(document).ready(function() {
     //Transform the HTML table in a fancy datatable
     $('#users').dataTable({
-		"oLanguage": {
+        stateSave: true,
+        "oLanguage": {
                     "sEmptyTable":     "<?php echo lang('datatable_sEmptyTable');?>",
                     "sInfo":           "<?php echo lang('datatable_sInfo');?>",
                     "sInfoEmpty":      "<?php echo lang('datatable_sInfoEmpty');?>",
@@ -167,9 +175,6 @@ $(document).ready(function() {
         $(this).removeData('modal');
     });
     $('#frmResetPwd').on('hidden', function() {
-        $(this).removeData('modal');
-    });
-    $('#frmImportUsers').on('hidden', function() {
         $(this).removeData('modal');
     });
 });

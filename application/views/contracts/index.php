@@ -1,7 +1,7 @@
 <?php
 /**
  * This view lists the contracts created into the application
- * @copyright  Copyright (c) 2014-2015 Benjamin BALET
+ * @copyright  Copyright (c) 2014-2016 Benjamin BALET
  * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.1.0
@@ -108,7 +108,8 @@ $(document).ready(function() {
 $(document).ready(function() {
     //Transform the HTML table in a fancy datatable
     $('#contracts').dataTable({
-		"oLanguage": {
+        stateSave: true,
+        "oLanguage": {
                     "sEmptyTable":     "<?php echo lang('datatable_sEmptyTable');?>",
                     "sInfo":           "<?php echo lang('datatable_sInfo');?>",
                     "sInfoEmpty":      "<?php echo lang('datatable_sInfoEmpty');?>",

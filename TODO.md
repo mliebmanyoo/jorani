@@ -5,14 +5,16 @@ I tried to sort them out by priority and to explicitly explain what is out of sc
 
 - [X] Support half-days in Fullcalendar widget.
 - [X] USABILITY: Don't display 404 for broken links but a full page instead.
-- [X] OAuth2 with Google+ as 3rd party authentifier.
+- [X] Signin with Google+ as 3rd party OAuth2 provider.
 - [X] Add Ukrainian language.
+- [ ] Add Persian language.
+- [X] Add a better Khmer translation.
+- [X] Possibility to change the font of the application (HTML5).
 - [X] Prevent the creation of a leave request with a duration of 0.
-Bugs:
-- [X] Broken link in Leave request e-mail.
-- [X] ICS Feed is not working in global calendar (partly due to missing timezone var in PHP.ini).
-Performance:
-- [X] Optimize autoloading (see composer for VObjects).
+- [X] Possibility to disable the capitalization of lastname.
+- [X] BUG: Broken link in Leave request e-mail.
+- [X] BUG: ICS Feed is not working in global calendar (partly due to missing timezone var in PHP.ini).
+- [X] PERFORMANCE: Optimize autoloading (see composer for VObjects).
 
 ## v0.5.0 or later
 
@@ -63,3 +65,13 @@ request a leave even if your credit is negative and because leave balance report
 - [ ] Different colors for each leave type. Requesters often don't know that you can get the list of leaves elsewhere.
 - [ ] PDF Export (no serious OSS PDF lib dealing correctly with Unicode / Modern browsers can print as PDF).
 - [ ] Migration to CI 3.0.0 (we don't rely too much on the library, so it has no interrest and it is slower than v2).
+
+# Impacts
+
+## Fullcalendar
+
+Migration of fullcalendar requires the application of this patch https://github.com/fullcalendar/fullcalendar/issues/2516 while the issue is not solved.
+
+## Jquery
+
+We noticed an incompatibility between Jquery 2 and datatable that must be investigated prior any migration.

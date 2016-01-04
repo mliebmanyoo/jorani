@@ -1,7 +1,7 @@
 <?php
 /**
  * Translation file
- * @copyright  Copyright (c) 2014-2015 Benjamin BALET
+ * @copyright  Copyright (c) 2014-2016 Benjamin BALET
  * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.1.0
@@ -39,8 +39,6 @@ $lang['leaves_index_popup_delete_question'] = 'Vuoi proseguire?';
 $lang['leaves_index_popup_delete_button_yes'] = 'Si';
 $lang['leaves_index_popup_delete_button_no'] = 'No';
 
-$lang['leaves_date_type_morning'] = 'Mattina';
-$lang['leaves_date_type_afternoon'] = 'Pomeriggio';
 $lang['leaves_create_title'] = 'Invia una richiesta di ferie';
 $lang['leaves_create_field_start'] = 'Data inizio';
 $lang['leaves_create_field_end'] = 'Data fine';

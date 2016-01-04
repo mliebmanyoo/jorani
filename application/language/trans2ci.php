@@ -1,22 +1,22 @@
 <?php
 /**
  * Utility script that converts a PO file to PHP array i18n files
- * @copyright  Copyright (c) 2014-2015 Benjamin BALET
- * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
- * @link            https://github.com/bbalet/jorani
- * @since         0.3.0
+ * @copyright  Copyright (c) 2014-2016 Benjamin BALET
+ * @license    http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
+ * @link       https://github.com/bbalet/jorani
+ * @since      0.3.0
  */
 require("POParser.php");
-$target = "persian";
+$target = "khmer";
 
 $copyright = "<?php
 /**
  * Translation file
- * @copyright  Copyright (c) 2014-2015 Benjamin BALET
+ * @copyright  Copyright (c) 2014-2016 Benjamin BALET
  * @license     http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
  * @link          https://github.com/bbalet/jorani
  * @since       0.4.4
- * @author      Sayed Kabir Salehi
+ * @author      Heng Vongkol
  */\n\n";
 
 //Load and parse the PO file

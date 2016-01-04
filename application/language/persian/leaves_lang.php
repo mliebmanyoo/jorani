@@ -1,7 +1,7 @@
 <?php
 /**
  * Translation file
- * @copyright  Copyright (c) 2014-2015 Benjamin BALET
+ * @copyright  Copyright (c) 2014-2016 Benjamin BALET
  * @license     http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
  * @link          https://github.com/bbalet/jorani
  * @since       0.4.4
@@ -38,9 +38,6 @@ $lang['leaves_index_popup_delete_message'] = 'شما میخواهید یک در�
 $lang['leaves_index_popup_delete_question'] = 'آیا میخواهید ادامه بدهید؟';
 $lang['leaves_index_popup_delete_button_yes'] = 'بله';
 $lang['leaves_index_popup_delete_button_no'] = 'خیر';
-
-$lang['leaves_date_type_morning'] = 'صبح';
-$lang['leaves_date_type_afternoon'] = 'بعد از ظهر';
 
 $lang['leaves_create_title'] = 'ارسال یک درخواست مرخصی';
 $lang['leaves_create_field_start'] = 'تاریخ شروع';

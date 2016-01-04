@@ -1,7 +1,7 @@
 <?php
 /**
  * Translation file
- * @copyright  Copyright (c) 2014-2015 Benjamin BALET
+ * @copyright  Copyright (c) 2014-2016 Benjamin BALET
  * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.4.0
@@ -38,9 +38,6 @@ $lang['leaves_index_popup_delete_message'] = 'Estás a punto de borrar una solic
 $lang['leaves_index_popup_delete_question'] = '¿Quieres continuar?';
 $lang['leaves_index_popup_delete_button_yes'] = 'Sí';
 $lang['leaves_index_popup_delete_button_no'] = 'No';
-
-$lang['leaves_date_type_morning'] = 'Mañana';
-$lang['leaves_date_type_afternoon'] = 'Tarde';
 
 $lang['leaves_create_title'] = 'Enviar una solicitud de permiso';
 $lang['leaves_create_field_start'] = 'Primera fecha';

@@ -2,7 +2,7 @@
 /**
  * This view displays the list of collaborators of the connected employee.
  * e.g. users having the connected user as their line manager.
- * @copyright  Copyright (c) 2014-2015 Benjamin BALET
+ * @copyright  Copyright (c) 2014-2016 Benjamin BALET
  * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.4.0
@@ -12,9 +12,9 @@
 <div class="row-fluid">
     <div class="span12">
 
-<?php echo $flash_partial_view;?>
-
 <h2><?php echo lang('requests_collaborators_title');?>  &nbsp;<?php echo $help;?></h2>
+
+<?php echo $flash_partial_view;?>
 
 <p><?php echo lang('requests_collaborators_description');?></p>
 

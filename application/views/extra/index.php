@@ -1,7 +1,7 @@
 <?php
 /**
  * This view displays the list of overtime request created by the connected user.
- * @copyright  Copyright (c) 2014-2015 Benjamin BALET
+ * @copyright  Copyright (c) 2014-2016 Benjamin BALET
  * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.2.0
@@ -11,9 +11,9 @@
 <div class="row-fluid">
     <div class="span12">
 
-<?php echo $flash_partial_view;?>
+<h2><?php echo lang('extra_index_title');?><?php echo $help;?></h2>
 
-<h2><?php echo lang('extra_index_title');?></h2>
+<?php echo $flash_partial_view;?>
 
 <table cellpadding="0" cellspacing="0" border="0" class="display" id="extras" width="100%">
     <thead>

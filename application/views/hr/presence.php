@@ -2,7 +2,7 @@
 /**
  * This view builds the monthly presence report of an employee
  * By default, the last month is selected.
- * @copyright  Copyright (c) 2014-2015 Benjamin BALET
+ * @copyright  Copyright (c) 2014-2016 Benjamin BALET
  * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.3.1
@@ -139,6 +139,19 @@
                     case 4: $class .= "rejected"; break;  // Rejected
                     case 5: $class .="dayoff"; break;
                     case 6: $class .="dayoff"; break;
+                }
+                //If we have two requests the same day (morning/afternoon)
+                if (($statuses[0] == $statuses[1]) && ($periods[0] != $periods[1])){
+                    switch (intval($statuses[0]))
+                    {
+                        case 1: $class = "allplanned"; break;  // Planned
+                        case 2: $class = "allrequested"; break;  // Requested
+                        case 3: $class = "allaccepted"; break;  // Accepted
+                        case 4: $class = "allrejected"; break;  // Rejected
+                        //The 2 cases below would be weird...
+                        case 5: $class ="dayoff"; break;
+                        case 6: $class ="dayoff"; break;
+                    }
                 }
           } else {
             switch ($day->display) {

@@ -1,7 +1,7 @@
 <?php
 /**
  * This controller manages user session
- * @copyright  Copyright (c) 2014-2015 Benjamin BALET
+ * @copyright  Copyright (c) 2014-2016 Benjamin BALET
  * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.1.0
@@ -236,13 +236,13 @@ class Session extends CI_Controller {
             $this->load->model('users_model');
             switch ($oauth2Provider) {
                 case 'google':
-                    $provider = new League\OAuth2\Client\Provider\Google([
+                    $provider = new League\OAuth2\Client\Provider\Google(Array(
                         'clientId' => $oauth2ClientId,
                         'clientSecret' => $oauth2ClientSecret,
                         'redirectUri' => 'postmessage',
                         'accessType' => 'offline',
-                    ]);
-                    $token = $provider->getAccessToken('authorization_code', ['code' => $authCode]);
+                    ));
+                    $token = $provider->getAccessToken('authorization_code', Array('code' => $authCode));
                     try {
                         //We try to get the e-mail address from the Google+ API
                         $ownerDetails = $provider->getResourceOwner($token);
