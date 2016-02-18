@@ -15,52 +15,124 @@
 
 <?php echo $flash_partial_view;?>
 
-<div class="row-fluid">
-    <div class="span4">
-        <input type="hidden" name="entity" id="entity" />
-         <label for="txtEntity"><?php echo lang('hr_employees_field_entity');?></label>
-         <div class="input-append">
-             <input type="text" id="txtEntity" name="txtEntity" readonly />
-             <a id="cmdSelectEntity" class="btn btn-primary"><?php echo lang('hr_employees_button_select');?></a>
+        <div class="row-fluid">
+            <div class="span6">
+                <input type="hidden" name="entity" id="entity" />
+                 <label for="txtEntity"><?php echo lang('hr_employees_field_entity');?>
+                    <div class="input-append">
+                        <input type="text" id="txtEntity" name="txtEntity" readonly />
+                        <a id="cmdSelectEntity" class="btn btn-primary"><?php echo lang('hr_employees_button_select');?></a>
+                    </div>
+                 </label>
+                </div>
+            <div class="span6">
+                <div class="pull-left">
+                    <input type="checkbox" id="chkIncludeChildren" /> <?php echo lang('hr_employees_field_subdepts');?>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="btn-group" data-toggle="buttons-radio">
+                  <button id="cmdAll" type="button" class="btn"><?php echo lang('hr_employees_button_all');?></button>
+                  <button id="cmdActive" type="button" class="btn"><?php echo lang('hr_employees_button_active');?></button>
+                  <button id="cmdInactive" type="button" class="btn"><?php echo lang('hr_employees_button_inactive');?></button>
+                </div>
+                &nbsp;
+                <?php echo lang('hr_employees_thead_datehired');?>
+                <div class="input-prepend">
+                    <div class="btn-group">
+                        <div class="btn-group" data-toggle="buttons-radio">
+                            <button id="cmdGreater1" type="button" class="btn active"><i class="fa fa-chevron-right"></i></button>
+                            <button id="cmdLesser1" type="button" class="btn"><i class="fa fa-chevron-left"></i></button>
+                        </div>
+                        <input type="text" id="viz_datehired1" class="input-small" readonly />
+                    </div>                            
+                </div>
+                &nbsp;&mdash;&nbsp;
+                <div class="input-prepend">
+                    <div class="btn-group">
+                        <div class="btn-group" data-toggle="buttons-radio">
+                            <button id="cmdGreater2" type="button" class="btn"><i class="fa fa-chevron-right"></i></button>
+                            <button id="cmdLesser2" type="button" class="btn active"><i class="fa fa-chevron-left"></i></button>
+                        </div>
+                        <input type="text" id="viz_datehired2" class="input-small" readonly />
+                    </div>                            
+                </div>
+                <input type="hidden" name="datehired1" id="datehired1" />
+                <input type="hidden" name="datehired2" id="datehired2" />
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span6">
+              <?php echo lang('hr_employees_description');?>
+            </div>
+            <div class="span6">
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <button id="cmdSelection" class="btn dropdown-toggle btn-primary" data-toggle="dropdown">
+                          <i class="fa fa-pencil"></i>&nbsp;<?php echo lang('hr_employees_button_selection');?>&nbsp;<span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="cmdCreateRequest"><i class="fa fa-plus"></i>&nbsp;<?php echo lang('hr_employees_button_create_request');?></a></li>
+                            <li><a href="#" id="cmdSelectManager"><i class="fa fa-user"></i>&nbsp;<?php echo lang('hr_employees_button_select_manager');?></a></li>
+                            <li><a href="#" id="cmdAddEntitlments"><i class="fa fa-pencil-square-o"></i>&nbsp;<?php echo lang('hr_employees_button_entitleddays');?></a></li>
+                            <li><a href="#" id="cmdSelectContract"><i class="fa fa-file-text-o"></i>&nbsp;<?php echo lang('hr_employees_button_select_contract');?></a></li>
+                            <li><a href="#" id="cmdChangeEntity"><i class="fa fa-sitemap"></i>&nbsp;<?php echo lang('hr_employees_button_select_entity');?></a></li>
+                            <li class="divider"></li>
+                            <li><a href="#" id="cmdSelectAll"><i class="fa fa-circle"></i>&nbsp;<?php echo lang('hr_employees_button_select_all');?></a></li>
+                            <li><a href="#" id="cmdDeselectAll"><i class="fa fa-circle-o"></i>&nbsp;<?php echo lang('hr_employees_button_deselect_all');?></a></li>
+                        </ul>
+                    </div>
+                  &nbsp;<a href="#" id="cmdExportEmployees" class="btn btn-primary"><i class="fa fa-file-excel-o"></i>&nbsp;<?php echo lang('hr_employees_button_export');?></a>
+                  &nbsp;<a href="<?php echo base_url();?>users/create" class="btn btn-primary"><i class="icon-plus-sign icon-white"></i>&nbsp;<?php echo lang('hr_employees_button_create_user');?></a>
+              </div>
+            </div>
+        </div>
+
+        <div class="row-fluid"><div class="span12">&nbsp;</div></div>
+
+        <div class="row-fluid">
+            <div class="span12">
+                <table cellpadding="0" cellspacing="0" border="0" class="display" id="users" width="100%">
+                    <thead>
+                        <tr>
+                            <th><?php echo lang('hr_employees_thead_id');?></th>
+                            <th><?php echo lang('hr_employees_thead_firstname');?></th>
+                            <th><?php echo lang('hr_employees_thead_lastname');?></th>
+                            <th><?php echo lang('hr_employees_thead_email');?></th>
+                            <th><?php echo lang('hr_employees_thead_entity');?></th>
+                            <th><?php echo lang('hr_employees_thead_contract');?></th>
+                            <th><?php echo lang('hr_employees_thead_manager');?></th>
+                            <th><?php echo lang('hr_employees_thead_identifier');?></th>
+                            <th><?php echo lang('hr_employees_thead_datehired');?></th>
+                            <th><?php echo lang('hr_employees_thead_position');?></th>
+                        </tr>
+                    </thead>
+                    <tbody class="context" data-toggle="context" data-target="#context-menu">
+                    </tbody>
+                </table>
+            </div>
          </div>
-    </div>
-    <div class="span4">
-      <input type="checkbox" id="chkIncludeChildren" /> <?php echo lang('hr_employees_field_subdepts');?>
-    </div>
-    <div class="span4">
-      <?php echo lang('hr_employees_description');?>
-    </div>
-</div>
 
-<table cellpadding="0" cellspacing="0" border="0" class="display" id="users" width="100%">
-    <thead>
-        <tr>
-            <th><?php echo lang('hr_employees_thead_id');?></th>
-            <th><?php echo lang('hr_employees_thead_firstname');?></th>
-            <th><?php echo lang('hr_employees_thead_lastname');?></th>
-            <th><?php echo lang('hr_employees_thead_email');?></th>
-            <th><?php echo lang('hr_employees_thead_entity');?></th>
-            <th><?php echo lang('hr_employees_thead_contract');?></th>
-            <th><?php echo lang('hr_employees_thead_manager');?></th>
-        </tr>
-    </thead>
-    <tbody class="context" data-toggle="context" data-target="#context-menu">
-    </tbody>
-</table>
-    </div>
-</div>
-
-<div class="row-fluid">
-    <div class="span2">
-      <a href="<?php echo base_url();?>users/create" class="btn btn-primary"><i class="icon-plus-sign icon-white"></i>&nbsp;<?php echo lang('hr_employees_button_create_user');?></a>
-    </div>
-    <div class="span2">
-      <a href="#" id="cmdExportEmployees" class="btn btn-primary"><i class="fa fa-file-excel-o"></i>&nbsp;<?php echo lang('hr_employees_button_export');?></a>
-    </div>
-    <div class="span8">&nbsp;</div>
+        </div>
 </div>
 
 <div class="row-fluid"><div class="span12">&nbsp;</div></div>
+
+<div id="frmSelectManager" class="modal hide fade">
+    <div class="modal-header">
+        <a href="#" onclick="$('#frmSelectManager').modal('hide');" class="close">&times;</a>
+         <h3><?php echo lang('hr_employees_popup_manager_title');?></h3>
+    </div>
+    <div class="modal-body" id="frmSelectManagerBody">
+        <img src="<?php echo base_url();?>assets/images/loading.gif">
+    </div>
+    <div class="modal-footer">
+        <a href="#" onclick="select_manager();" class="btn btn-primary"><?php echo lang('OK');?></a>
+        <a href="#" onclick="$('#frmSelectManager').modal('hide');" class="btn btn-danger"><?php echo lang('Cancel');?></a>
+    </div>
+</div>
 
 <div id="frmSelectEntity" class="modal hide fade">
     <div class="modal-header">
@@ -71,8 +143,117 @@
         <img src="<?php echo base_url();?>assets/images/loading.gif">
     </div>
     <div class="modal-footer">
-        <a href="#" onclick="select_entity();" class="btn secondary"><?php echo lang('hr_employees_popup_entity_button_ok');?></a>
-        <a href="#" onclick="$('#frmSelectEntity').modal('hide');" class="btn secondary"><?php echo lang('hr_employees_popup_entity_button_cancel');?></a>
+        <a href="#" onclick="select_entity();" class="btn"><?php echo lang('OK');?></a>
+        <a href="#" onclick="$('#frmSelectEntity').modal('hide');" class="btn"><?php echo lang('Cancel');?></a>
+    </div>
+</div>
+
+<div id="frmSelectContract" class="modal hide fade">
+    <div class="modal-header">
+        <a href="#" onclick="$('#frmSelectContract').modal('hide');" class="close">&times;</a>
+         <h3><?php echo lang('hr_employees_popup_contract_title');?></h3>
+    </div>
+    <div class="modal-body">
+        <select id="cboContract" class="selectized input-xlarge">
+        <?php $index = 0;
+             foreach ($contracts as $contract) { ?>
+            <option value="<?php echo $contract['id'] ?>" <?php if ($index == 0) echo "selected"; ?>><?php echo $contract['name']; ?></option>
+        <?php 
+                $index++;
+            } ?>
+        </select>
+    </div>
+    <div class="modal-footer">
+        <a href="#" onclick="select_contract();" class="btn"><?php echo lang('OK');?></a>
+        <a href="#" onclick="$('#frmSelectContract').modal('hide');" class="btn"><?php echo lang('Cancel');?></a>
+    </div>
+</div>
+
+<div id="frmAddEntitledDays" class="modal hide fade">
+        <div class="modal-header">
+            <a href="#" class="close" onclick="$('#frmAddEntitledDays').modal('hide');">&times;</a>
+            <h3 id="frmAddEntitledDaysTitle"><?php echo lang('entitleddays_contract_popup_title');?></h3>
+        </div>
+        <div class="modal-body">
+            <label for="viz_startentdate"><?php echo lang('entitleddays_user_index_field_start');?></label>
+            <input type="text" id="viz_startentdate" name="viz_startentdate" required />
+            <br />
+            <input type="hidden" name="startentdate" id="startentdate" />
+            <label for="viz_endentdate"><?php echo lang('entitleddays_user_index_field_end');?></label>
+            <input type="text" id="viz_endentdate" name="viz_endentdate" required /><br />
+            <input type="hidden" name="endentdate" id="endentdate" />
+            <label for="typeEnt"><?php echo lang('entitleddays_user_index_field_type');?></label>
+            <select name="typeEnt" id="typeEnt" required>
+            <?php foreach ($types as $types_item): ?>
+                <option value="<?php echo $types_item['id'] ?>" <?php if ($types_item['id'] == 1) echo "selected" ?>><?php echo $types_item['name'] ?></option>
+            <?php endforeach ?> 
+            </select>    
+            <label for="daysEnt" required><?php echo lang('entitleddays_user_index_field_days');?></label>
+            <input type="text" class="input-mini" name="daysEnt" id="daysEnt" />
+            <label for="descriptionEnt"><?php echo lang('entitleddays_user_index_field_description');?></label>
+            <input type="text" class="input-xlarge" name="descriptionEnt" id="descriptionEnt" />
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" onclick="add_entitleddays();" ><?php echo lang('OK');?></button>
+            <button class="btn btn-danger" onclick="$('#frmAddEntitledDays').modal('hide');"><?php echo lang('entitleddays_user_index_button_cancel');?></button>
+        </div>
+ </div>
+
+<div id="frmCreateLeaveRequest" class="modal hide fade">
+    <div class="modal-header">
+        <a href="#" onclick="$('#frmCreateLeaveRequest').modal('hide');" class="close">&times;</a>
+         <h3><?php echo lang('hr_employees_button_create_request');?></h3>
+    </div>
+    <div class="modal-body">
+        <label for="leaveType"><?php echo lang('leaves_create_field_type');?></label>
+        <select name="leaveType" id="leaveType">
+        <?php
+        $default_type = $this->config->item('default_leave_type');
+        $default_type = $default_type == FALSE ? 0 : $default_type;
+        foreach ($types as $types_item): ?>
+            <option value="<?php echo $types_item['id'] ?>" <?php if ($types_item['id'] == $default_type) echo "selected" ?>><?php echo $types_item['name'] ?></option>
+        <?php endforeach ?>
+        </select>
+
+        <label for="viz_leaveStartdate"><?php echo lang('leaves_create_field_start');?></label>
+        <input type="text" name="viz_leaveStartdate" id="viz_leaveStartdate" autocomplete="off" />
+        <input type="hidden" name="leaveStartdate" id="leaveStartdate" />
+        <select name="leaveStartdatetype" id="leaveStartdatetype">
+            <option value="Morning" selected><?php echo lang('Morning');?></option>
+            <option value="Afternoon"><?php echo lang('Afternoon');?></option>
+        </select><br />
+
+        <label for="viz_leaveEnddate"><?php echo lang('leaves_create_field_end');?></label>
+        <input type="text" name="viz_leaveEnddate" id="viz_leaveEnddate" autocomplete="off" />
+        <input type="hidden" name="leaveEnddate" id="leaveEnddate" />
+        <select name="leaveEnddatetype" id="leaveEnddatetype">
+            <option value="Morning"><?php echo lang('Morning');?></option>
+            <option value="Afternoon" selected><?php echo lang('Afternoon');?></option>
+        </select><br />
+
+        <label for="leaveDuration"><?php echo lang('leaves_create_field_duration');?></label>
+        <input type="text" name="leaveDuration" id="leaveDuration" />
+
+        <div class="alert hide alert-error" id="lblOverlappingAlert" onclick="$('#lblOverlappingAlert').hide();">
+            <button type="button" class="close">&times;</button>
+            <?php echo lang('leaves_create_field_overlapping_message');?>
+        </div>
+
+        <label for="leaveCause"><?php echo lang('leaves_create_field_cause');?></label>
+        <textarea name="leaveCause" id="leaveCause"></textarea>
+
+        <label for="leaveStatus"><?php echo lang('leaves_create_field_status');?></label>
+        <select name="leaveStatus" id ="leaveStatus">
+            <option value="1"><?php echo lang('Planned');?></option>
+            <option value="2"><?php echo lang('Requested');?></option>
+            <option value="3"><?php echo lang('Accepted');?></option>
+            <option value="4"><?php echo lang('Rejected');?></option>
+        </select><br />
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" onclick="createLeaveRequest();" class="btn"><?php echo lang('OK');?></a>
+        <a href="#" onclick="$('#frmCreateLeaveRequest').modal('hide');" class="btn"><?php echo lang('Cancel');?></a>
     </div>
 </div>
 
@@ -117,35 +298,221 @@
         </div>
  </div>
 
-<link href="<?php echo base_url();?>assets/datatable/css/jquery.dataTables.css" rel="stylesheet">
+<link href="<?php echo base_url();?>assets/datatable/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="<?php echo base_url();?>assets/datatable/buttons/css/buttons.dataTables.min.css" rel="stylesheet"/>
+<link href="<?php echo base_url();?>assets/datatable/colreorder/css/colReorder.dataTables.min.css" rel="stylesheet">
+<link href="<?php echo base_url();?>assets/datatable/select/css/select.dataTables.min.css" rel="stylesheet">
+<link rel="stylesheet" href="<?php echo base_url();?>assets/css/flick/jquery-ui.custom.min.css">
+<script type="text/javascript" src="<?php echo base_url();?>assets/js/moment-with-locales.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="<?php echo base_url();?>assets/datatable/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/datatable/buttons/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/datatable/buttons/js/buttons.colVis.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/datatable/colreorder/js/dataTables.colReorder.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/datatable/select/js/dataTables.select.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url();?>assets/js/bootbox.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>assets/js/jquery.pers-brow.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>assets/js/context.menu.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>assets/js/toe.min.js"></script>
+<script src="<?php echo base_url();?>assets/js/jquery-ui.custom.min.js"></script>
+<?php //Prevent HTTP-404 when localization isn't needed
+if ($language_code != 'en') { ?>
+<script src="<?php echo base_url();?>assets/js/i18n/jquery.ui.datepicker-<?php echo $language_code;?>.js"></script>
+<?php } ?>
+
 <script type="text/javascript">
 var entity = 0; //Root of the tree by default
 var entityName = '';
 var includeChildren = true;
 var contextObject;
+var contextSelectEntity = "select";
+var filterActive = "all"; //active (only), inactive (only), all
 var oTable;
+var filterDate = "greater/empty/greater/empty";
+var state1="greater";
+var state2="lesser";
 
 //Handle choose of entity with the modal form "select an entity". Update cookie with selected values
 function select_entity() {
     entity = $('#organization').jstree('get_selected')[0];
     entityName = $('#organization').jstree().get_text(entity);
-    includeChildren = $('#chkIncludeChildren').is(':checked');
-    $('#entity').val(entity);
-    $('#txtEntity').val(entityName);
-    $.cookie('entity', entity);
-    $.cookie('entityName', entityName);
-    $.cookie('includeChildren', includeChildren);
     $("#frmSelectEntity").modal('hide');
-    //Refresh datatable
+    if (contextSelectEntity == "select") {
+        //"select": Filter the content of datatable for a given entity
+        includeChildren = $('#chkIncludeChildren').is(':checked');
+        $('#entity').val(entity);
+        $('#txtEntity').val(entityName);
+        $.cookie('entity', entity);
+        $.cookie('entityName', entityName);
+        $.cookie('includeChildren', includeChildren);
+        refreshDataTable();
+    } else {
+        //"change": Move selected employees to another entity
+        var employeeIds = getSelectedEmployees();
+        //Call a web service that changes the entity of a list of employees
+        $('#frmModalAjaxWait').modal('show');
+        $.ajax({
+            url: "<?php echo base_url();?>hr/employees/edit/entity",
+            type: "POST",
+            data: {
+                    entity: entity,
+                    employees: employeeIds
+                }
+          }).done(function() {
+              oTable.ajax.reload(function ( json ) {
+                  $('#frmModalAjaxWait').modal('hide');
+              });
+        });
+    }
+}
+
+function refreshDataTable() {
+    date1 = $("#datehired1").val()!=""?$("#datehired1").val():"empty";
+    date2 = $("#datehired2").val()!=""?$("#datehired2").val():"empty";
+    filterDate = state1 + "/" + date1 + "/" + state2 + "/" + date2;
     $('#frmModalAjaxWait').modal('show');
-    oTable.api().ajax.url('<?php echo base_url();?>hr/employees/entity/' + entity + '/' + includeChildren)
+    oTable.ajax.url('<?php echo base_url();?>hr/employees/entity/' + entity + '/' + includeChildren + '/' + filterActive + '/' + filterDate)
         .load(function() {
             $("#frmModalAjaxWait").modal('hide');
         }, true);
+}
+
+//Get the list of selected employees into the datatable
+//Return a JSON representation of an array of identifiers (integer)
+function getSelectedEmployees() {
+    var employeeIds = [];
+    oTable.rows({selected: true}).every( function () {
+        employeeIds.push(this.data().id);
+     });
+     return JSON.stringify(employeeIds);
+}
+
+//Popup create leave request: on click OK:
+// - Find the id of all selected employees.
+// - Validate the input form.
+function createLeaveRequest() {
+    //Validate the form
+    var fieldname = "";
+    var startType = $('#leaveStartdatetype option:selected').val();
+    var endType = $('#leaveEnddatetype option:selected').val();
+    var start = moment($('#leaveStartdate').val());
+    var end = moment($('#leaveEnddate').val());
+    if (start.isSame(end)) {
+        if (startType == "Afternoon" && endType == "Morning") {
+            bootbox.alert("<img src='<?php echo base_url();?>assets/images/date_error.png' />" +
+                    "&nbsp;<?php echo lang('leaves_create_field_end');?> >" +
+                    "&nbsp;<?php echo lang('leaves_create_field_start');?>");
+            return;
+        }
+    }
+    if ($('#viz_leaveStartdate').val() == "") fieldname = "<?php echo lang('leaves_create_field_start');?>";
+    if ($('#viz_leaveEnddate').val() == "") fieldname = "<?php echo lang('leaves_create_field_end');?>";
+    if ($('#leaveDuration').val() == "" || $('#leaveDuration').val() == 0) fieldname = "<?php echo lang('leaves_create_field_duration');?>";
+    if (fieldname != "") {
+        bootbox.alert(<?php echo lang('leaves_validate_mandatory_js_msg');?>);
+        return;
+    }
+
+    //Call a web service to batch insert all the leave requests
+    var employeeIds = getSelectedEmployees();
+    $('#frmModalAjaxWait').modal('show');
+    $.ajax({
+        url: "<?php echo base_url();?>hr/employees/create/leave",
+        type: "POST",
+        data: {
+                type: $('#leaveType').val(),
+                duration: $('#leaveDuration').val(),
+                startdate: $('#leaveStartdate').val(),
+                enddate: $('#leaveEnddate').val(),
+                startdatetype: startType,
+                enddatetype: endType,
+                cause: $('#leaveCause').val(),
+                status: $('#leaveStatus option:selected').val(),
+                employees: employeeIds
+            }
+      }).done(function() {
+        $('#frmModalAjaxWait').modal('hide');
+    });
+    $("#frmCreateLeaveRequest").modal('hide');
+}
+
+//Popup select manager: on click OK, find the id of all selected employees and update their manager.
+function select_manager() {
+    var employees = $('#employees').DataTable();
+    if ( employees.rows({ selected: true }).any() ) {
+        var manager_id = employees.rows({selected: true}).data()[0][0];
+        var employeeIds = getSelectedEmployees();
+        //Call a web service that changes the manager of a list of employees
+        $('#frmModalAjaxWait').modal('show');
+        $.ajax({
+            url: "<?php echo base_url();?>hr/employees/edit/manager",
+            type: "POST",
+            data: {
+                    manager: manager_id,
+                    employees: employeeIds
+                }
+          }).done(function() {
+              oTable.ajax.reload(function ( json ) {
+                  $('#frmModalAjaxWait').modal('hide');
+              });
+        });
+    }
+    $("#frmSelectManager").modal('hide');
+}
+
+//Popup select contract: on click OK, find the id of all selected employees and update their contract.
+function select_contract() {
+    var contract_id = $('#cboContract').val();
+    var employeeIds = getSelectedEmployees();
+    //Call a web service that changes the contract of a list of employees
+    $('#frmModalAjaxWait').modal('show');
+    $.ajax({
+        url: "<?php echo base_url();?>hr/employees/edit/contract",
+        type: "POST",
+        data: {
+                contract: contract_id,
+                employees: employeeIds
+            }
+      }).done(function() {
+          oTable.ajax.reload(function ( json ) {
+              $('#frmModalAjaxWait').modal('hide');
+          });
+    });
+    $("#frmSelectContract").modal('hide');
+}
+
+//Popup add entitled days: on click OK, find the id of all selected employees and update their contract.
+function add_entitleddays() {
+    var employeeIds = getSelectedEmployees();
+    //Validate the form
+    var fieldname = "";
+    if ($('#startentdate').val() == "") fieldname = "<?php echo lang('entitleddays_user_index_field_start');?>";
+    if ($('#endentdate').val() == "") fieldname = "<?php echo lang('entitleddays_user_index_field_end');?>";
+    if ($('#typeEnt').val() == "") fieldname = "<?php echo lang('entitleddays_user_index_field_type');?>";
+    if ($('#daysEnt').val() == "") fieldname = "<?php echo lang('entitleddays_user_index_field_days');?>";
+    if (fieldname != "") {
+        bootbox.alert(<?php echo lang('entitleddays_user_mandatory_js_msg');?>);
+        return;
+    }
+    
+    //Call a web service that changes the entitlements of a list of employees
+    $('#frmModalAjaxWait').modal('show');
+    $.ajax({
+        url: "<?php echo base_url();?>hr/employees/edit/entitlements",
+        type: "POST",
+        data: {
+                startdate: $('#startentdate').val(),
+                enddate: $('#endentdate').val(),
+                days: $('#daysEnt').val(),
+                type: $('#typeEnt').val(),
+                description: $('#descriptionEnt').val(),
+                employees: employeeIds
+            }
+      }).done(function() {
+          oTable.ajax.reload(function ( json ) {
+              $('#frmModalAjaxWait').modal('hide');
+          });
+    });
+    $("#frmAddEntitledDays").modal('hide');
 }
 
 //Prevent text selection after double click
@@ -159,11 +526,32 @@ function clearSelection() {
 }
 
 $(function () {
+<?php if ($this->config->item('csrf_protection') == TRUE) {?>
+    $.ajaxSetup({
+        data: {
+            <?php echo $this->security->get_csrf_token_name();?>: "<?php echo $this->security->get_csrf_hash();?>",
+        }
+    });
+<?php }?>
+    
+    //Global Ajax error handling mainly used for session expiration
+    $( document ).ajaxError(function(event, jqXHR, settings, errorThrown) {
+        $('#frmModalAjaxWait').modal('hide');
+        if (jqXHR.status == 401) {
+            bootbox.alert("<?php echo lang('global_ajax_timeout');?>", function() {
+                //After the login page, we'll be redirected to the current page 
+               location.reload();
+            });
+        } else { //Oups
+            bootbox.alert("<?php echo lang('global_ajax_error');?>");
+        }
+      });
+    
     //Handle a context menu of the DataTable
     $('.context').contextmenu({
         before: function (e, element, target) {
             e.preventDefault();
-            if (oTable.fnSettings().fnRecordsDisplay() != 0) {
+            if (oTable.data().any()) {
                 contextObject = e.target;
                 return true;
             } else {
@@ -220,70 +608,311 @@ $(function () {
         entity = $.cookie('entity');
         entityName = $.cookie('entityName');
         includeChildren = $.cookie('includeChildren');
+        if ($.cookie('filterActive') != null) {
+            filterActive = $.cookie('filterActive');
+        }
         //Parse boolean value contained into the string
         includeChildren = $.parseJSON(includeChildren.toLowerCase());
         $('#txtEntity').val(entityName);
         $('#chkIncludeChildren').prop('checked', includeChildren);
+        switch (filterActive) {
+            case "active": $("#cmdActive").addClass("active"); break;
+            case "inactive": $("#cmdInactive").addClass("active"); break;
+            case "all": $("#cmdAll").addClass("active"); break;
+        }
     } else { //Set default value
         $.cookie('entity', entity);
         $.cookie('entityName', entityName);
         $.cookie('includeChildren', includeChildren);
+        $.cookie('filterActive', filterActive);
     }    
 
-    //Transform the HTML table in a fancy datatable
-    oTable = $('#users').dataTable({
-                    stateSave: true,
-                    "ajax": '<?php echo base_url();?>hr/employees/entity/' + entity + '/' + includeChildren,
-                    "oLanguage": {
-                        "sEmptyTable":     "<?php echo lang('datatable_sEmptyTable');?>",
-                        "sInfo":           "<?php echo lang('datatable_sInfo');?>",
-                        "sInfoEmpty":      "<?php echo lang('datatable_sInfoEmpty');?>",
-                        "sInfoFiltered":   "<?php echo lang('datatable_sInfoFiltered');?>",
-                        "sInfoPostFix":    "<?php echo lang('datatable_sInfoPostFix');?>",
-                        "sInfoThousands":  "<?php echo lang('datatable_sInfoThousands');?>",
-                        "sLengthMenu":     "<?php echo lang('datatable_sLengthMenu');?>",
-                        "sLoadingRecords": "<?php echo lang('datatable_sLoadingRecords');?>",
-                        "sProcessing":     "<?php echo lang('datatable_sProcessing');?>",
-                        "sSearch":         "<?php echo lang('datatable_sSearch');?>",
-                        "sZeroRecords":    "<?php echo lang('datatable_sZeroRecords');?>",
-                    "oPaginate": {
-                        "sFirst":    "<?php echo lang('datatable_sFirst');?>",
-                        "sLast":     "<?php echo lang('datatable_sLast');?>",
-                        "sNext":     "<?php echo lang('datatable_sNext');?>",
-                        "sPrevious": "<?php echo lang('datatable_sPrevious');?>"
-                    },
-                    "oAria": {
-                        "sSortAscending":  "<?php echo lang('datatable_sSortAscending');?>",
-                        "sSortDescending": "<?php echo lang('datatable_sSortDescending');?>"
-                    }
-                }
-            });
-    $("#frmEntitledDays").alert();
+    //Transform the HTML table in a fancy datatable:
+    // * Column ID cannot be moved or hidden because it is used for contextual actions
+    oTable = $('#users').DataTable({
+            "ajax": '<?php echo base_url();?>hr/employees/entity/' + entity + '/' + includeChildren + '/' + filterActive + '/' + filterDate,
+            columns: [
+                { data: "id" },
+                { data: "firstname" },
+                { data: "lastname" },
+                { data: "email" },
+                { data: "entity" },
+                { data: "contract" },
+                { data: "manager_name" },
+                { data: "identifier" },
+                { data: 'datehired',
+                    render: {
+                        display: "display",
+                        sort: "timestamp"
+                    }, type: "numeric"
+                },
+                { data: "position" }
+            ],
+            stateSave: true,
+            select: 'multiple',
+            dom: 'Bfrtip',
+            buttons: [
+                            {
+                                extend: 'pageLength',
+                                text: '<?php echo lang('datatable_pagination');?>'
+                            },
+                            {
+                                extend: 'colvis',
+                                columns: ':not(:first-child)',
+                                postfixButtons: [
+                                    {
+                                        extend: 'colvisRestore',
+                                        text: '<?php echo lang('datatable_colvisRestore');?>'
+                                    }
+                                ]
+                            }
+            ],
+            lengthMenu: [
+                [ 10, 25, 50, -1 ],
+                [
+                    '<?php echo lang('datatable_10_rows');?>',
+                    '<?php echo lang('datatable_25_rows');?>',
+                    '<?php echo lang('datatable_50_rows');?>',
+                    '<?php echo lang('datatable_all_rows');?>' 
+                ]
+            ],
+            colReorder: {
+                fixedColumnsLeft: 1
+            },
+        language: {
+            buttons: {
+                colvis: '<?php echo lang('datatable_colvis');?>'
+            },
+            decimal:            "<?php echo lang('datatable_sInfoThousands');?>",
+            processing:       "<?php echo lang('datatable_sProcessing');?>",
+            search:              "<?php echo lang('datatable_sSearch');?>",
+            lengthMenu:     "<?php echo lang('datatable_sLengthMenu');?>",
+            info:                   "<?php echo lang('datatable_sInfo');?>",
+            infoEmpty:          "<?php echo lang('datatable_sInfoEmpty');?>",
+            infoFiltered:       "<?php echo lang('datatable_sInfoFiltered');?>",
+            infoPostFix:        "<?php echo lang('datatable_sInfoPostFix');?>",
+            loadingRecords: "<?php echo lang('datatable_sLoadingRecords');?>",
+            zeroRecords:    "<?php echo lang('datatable_sZeroRecords');?>",
+            emptyTable:     "<?php echo lang('datatable_sEmptyTable');?>",
+            paginate: {
+                first:          "<?php echo lang('datatable_sFirst');?>",
+                previous:   "<?php echo lang('datatable_sPrevious');?>",
+                next:           "<?php echo lang('datatable_sNext');?>",
+                last:           "<?php echo lang('datatable_sLast');?>"
+            },
+            aria: {
+                sortAscending:  "<?php echo lang('datatable_sSortAscending');?>",
+                sortDescending: "<?php echo lang('datatable_sSortDescending');?>"
+            }
+        },
+    });
     
     //Popup select entity
     $("#cmdSelectEntity").click(function() {
+        contextSelectEntity = "select";
         $("#frmSelectEntity").modal('show');
         $("#frmSelectEntityBody").load('<?php echo base_url(); ?>organization/select');
     });
     
-    //Prevent to load always the same content (refreshed each time)
-    $('#frmEntitledDays').on('hidden', function() {
-        $(this).removeData('modal');
+    //Force decimal separator whatever the locale is
+    $( "#days" ).keyup(function() {
+        var value = $("#days").val();
+        value = value.replace(",", ".");
+        $("#days").val(value);
+    });
+    //Link the two dates of the entitled days popup
+    $("#viz_startentdate").datepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: '<?php echo lang('global_date_js_format');?>',
+        altFormat: "yy-mm-dd",
+        altField: "#startentdate",
+        numberOfMonths: 3,
+              onClose: function( selectedDate ) {
+                $( "#viz_endentdate" ).datepicker( "option", "minDate", selectedDate );
+              }
+    }, $.datepicker.regional['<?php echo $language_code;?>']);
+    $("#viz_endentdate").datepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: '<?php echo lang('global_date_js_format');?>',
+        altFormat: "yy-mm-dd",
+        altField: "#endentdate",
+        numberOfMonths: 3,
+              onClose: function( selectedDate ) {
+                $( "#viz_startentdate" ).datepicker( "option", "maxDate", selectedDate );
+              }
+    }, $.datepicker.regional['<?php echo $language_code;?>']);
+    
+    //Change the manager of a group of employees
+    $("#cmdSelectManager").click(function() {
+        if (oTable.rows({selected: true}).any()) {
+            $("#frmSelectManager").modal('show');
+            $("#frmSelectManagerBody").load('<?php echo base_url(); ?>users/employees');
+        }
+        else {
+            bootbox.alert("<?php echo lang('hr_employees_multiple_edit_selection_msg');?>");
+        }
     });
     
+    //Add entitled days to a group of employees
+    $("#cmdAddEntitlments").click(function() {
+        if (oTable.rows({selected: true}).any()) {
+            $("#frmAddEntitledDays").modal('show');
+        }
+        else {
+            bootbox.alert("<?php echo lang('hr_employees_multiple_edit_selection_msg');?>");
+        }
+    });
+    
+    //Change the contract of a group of employees
+    $("#cmdSelectContract").click(function() {
+        if (oTable.rows({selected: true}).any()) {
+            $("#frmSelectContract").modal('show');
+        }
+        else {
+            bootbox.alert("<?php echo lang('hr_employees_multiple_edit_selection_msg');?>");
+        }
+    });
+    
+    //Move the entity of a group of employees
+    $("#cmdChangeEntity").click(function() {
+        if (oTable.rows({selected: true}).any()) {
+            contextSelectEntity = "change";
+            $("#frmSelectEntity").modal('show');
+            $("#frmSelectEntityBody").load('<?php echo base_url(); ?>organization/select');
+        }
+        else {
+            bootbox.alert("<?php echo lang('hr_employees_multiple_edit_selection_msg');?>");
+        }
+    });
+    
+    //Create a leave request for a group of employees
+    $("#cmdCreateRequest").click(function() {
+        if (oTable.rows({selected: true}).any()) {
+            $("#frmCreateLeaveRequest").modal('show');
+            //Init the start and end date picker and link them (end>=date)
+            $("#viz_leaveStartdate").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: '<?php echo lang('global_date_js_format');?>',
+                altFormat: "yy-mm-dd",
+                altField: "#leaveStartdate",
+                numberOfMonths: 1,
+                      onClose: function( selectedDate ) {
+                        $( "#viz_leaveEnddate" ).datepicker( "option", "minDate", selectedDate );
+                      }
+            }, $.datepicker.regional['<?php echo $language_code;?>']);
+            $("#viz_leaveEnddate").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: '<?php echo lang('global_date_js_format');?>',
+                altFormat: "yy-mm-dd",
+                altField: "#leaveEnddate",
+                numberOfMonths: 1,
+                      onClose: function( selectedDate ) {
+                        $( "#viz_leaveStartdate" ).datepicker( "option", "maxDate", selectedDate );
+                      }
+            }, $.datepicker.regional['<?php echo $language_code;?>']);
+        }
+        else {
+            bootbox.alert("<?php echo lang('hr_employees_multiple_edit_selection_msg');?>");
+        }
+    });
+    
+    //Select or deselect all rows
+    $("#cmdSelectAll").click(function() {
+        oTable.rows({filter: 'applied'}).select();
+    });
+    $("#cmdDeselectAll").click(function() {
+        oTable.rows().deselect();
+    });
+    
+    //If we opt-in the include children box, we'll recursively include the children of the selected entity
+    //and the attached employees
     $("#chkIncludeChildren").on('change', function() {
+        $('#frmModalAjaxWait').modal('show');
         includeChildren = $('#chkIncludeChildren').is(':checked');
         $.cookie('includeChildren', includeChildren);
         //Refresh datatable
-        $('#frmModalAjaxWait').modal('show');
-        oTable.api().ajax.url('<?php echo base_url();?>hr/employees/entity/' + entity + '/' + includeChildren)
+        oTable.ajax.url('<?php echo base_url();?>hr/employees/entity/' + entity + '/' + includeChildren + '/' + filterActive + '/' + filterDate)
             .load(function() {
                 $("#frmModalAjaxWait").modal('hide');
             }, true);
     });
     
+    //Manage radio buttons for the filtre active/inactive
+    $("#cmdAll").click(function() {
+        $('#frmModalAjaxWait').modal('show');
+        filterActive = "all";
+        $.cookie('filterActive', filterActive);
+        oTable.ajax.url('<?php echo base_url();?>hr/employees/entity/' + entity + '/' + includeChildren + '/' + filterActive + '/' + filterDate)
+            .load(function() {
+                $("#frmModalAjaxWait").modal('hide');
+            }, true);
+    });
+    $("#cmdActive").click(function() {
+        $('#frmModalAjaxWait').modal('show');
+        filterActive = "active";
+        $.cookie('filterActive', filterActive);
+        oTable.ajax.url('<?php echo base_url();?>hr/employees/entity/' + entity + '/' + includeChildren + '/' + filterActive + '/' + filterDate)
+            .load(function() {
+                $("#frmModalAjaxWait").modal('hide');
+            }, true); 
+    });
+    $("#cmdInactive").click(function() {
+        $('#frmModalAjaxWait').modal('show');
+        filterActive = "inactive";
+        $.cookie('filterActive', filterActive);
+        oTable.ajax.url('<?php echo base_url();?>hr/employees/entity/' + entity + '/' + includeChildren + '/' + filterActive + '/' + filterDate)
+            .load(function() {
+                $("#frmModalAjaxWait").modal('hide');
+            }, true); 
+    });
+    
+    //On click button export, call the export to Excel view
     $("#cmdExportEmployees").click(function() {
-        window.location = '<?php echo base_url();?>hr/employees/export/' + entity + '/' + includeChildren;
+        window.location = '<?php echo base_url();?>hr/employees/export/' + entity + '/' + includeChildren + '/' + filterActive + '/' + filterDate;
+    });
+
+    //Filter on date hired
+    $("#viz_datehired1").datepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: '<?php echo lang('global_date_js_format');?>',
+        altFormat: "yy-mm-dd",
+        altField: "#datehired1",
+        onSelect: function() {
+            refreshDataTable();
+        }
+    }, $.datepicker.regional['<?php echo $language_code;?>']);
+    $("#viz_datehired2").datepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: '<?php echo lang('global_date_js_format');?>',
+        altFormat: "yy-mm-dd",
+        altField: "#datehired2",
+        onSelect: function() {
+            refreshDataTable();
+        }
+    }, $.datepicker.regional['<?php echo $language_code;?>']);
+    
+    //Handle filters on date hired field
+    $("#cmdLesser1").click(function() {
+        state1="lesser";
+        refreshDataTable();
+    });
+    $("#cmdGreater1").click(function() {
+        state1="greater";
+        refreshDataTable();
+    });
+    $("#cmdLesser2").click(function() {
+        state2="lesser";
+        refreshDataTable();
+    });
+    $("#cmdGreater2").click(function() {
+        state2="greater";
+        refreshDataTable();
     });
 });
 </script>

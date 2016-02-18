@@ -24,6 +24,9 @@ $lang['hr_employees_thead_email'] = 'E-mail';
 $lang['hr_employees_thead_entity'] = 'Entity';
 $lang['hr_employees_thead_contract'] = 'Contract';
 $lang['hr_employees_thead_manager'] = 'Manager';
+$lang['hr_employees_thead_identifier'] = 'Identifier';
+$lang['hr_employees_thead_datehired'] = 'Date hired';
+$lang['hr_employees_thead_position'] = 'Position';
 $lang['hr_employees_button_create_user'] = 'Create';
 $lang['hr_employees_button_export'] = 'Export this list';
 $lang['hr_employees_popup_entitlment_title'] = 'Entitled days';
@@ -36,6 +39,22 @@ $lang['hr_employees_popup_entity_button_ok'] = 'OK';
 $lang['hr_employees_popup_entity_button_cancel'] = 'Cancel';
 $lang['hr_employees_description'] = 'Right-click / taphold on an employee for contextual actions.';
 $lang['hr_employees_field_subdepts'] = 'Include sub-departments';
+
+$lang['hr_employees_button_all'] = 'All';
+$lang['hr_employees_button_active'] = 'Active';
+$lang['hr_employees_button_inactive'] = 'Inactive';
+$lang['hr_employees_button_selection'] = 'Selection';
+$lang['hr_employees_button_select_all'] = 'Select all';
+$lang['hr_employees_button_deselect_all'] = 'Deselect all';
+$lang['hr_employees_button_select_manager'] = 'Select Manager';
+$lang['hr_employees_button_select_contract'] = 'Select Contract';
+$lang['hr_employees_button_select_entity'] = 'Select Entity';
+$lang['hr_employees_popup_contract_title'] = 'Select Contract';
+$lang['hr_employees_button_entitleddays'] = 'Entitled days';
+$lang['hr_employees_button_create_request'] = 'Submit a leave request';
+
+$lang['hr_employees_popup_manager_title'] = 'Select the manager';
+$lang['hr_employees_multiple_edit_selection_msg'] = 'You must select at least one employee into the table';
 
 $lang['hr_export_employees_title'] = 'List of employees';
 $lang['hr_export_employees_thead_id'] = 'ID';
@@ -87,6 +106,11 @@ $lang['hr_leaves_create_button_create'] = 'Request leave';
 $lang['hr_leaves_create_button_cancel'] = 'Cancel';
 $lang['hr_leaves_create_flash_msg_success'] = 'The leave request has been succesfully created';
 $lang['hr_leaves_create_flash_msg_error'] = 'The leave request has been succesfully created or updated, but you don\'t have a manager.';
+$lang['hr_leaves_flash_spn_list_days_off'] = '%s non-working days in the period';
+$lang['hr_leaves_flash_msg_overlap_dayoff'] = 'Your leave request matches with a non-working day.';
+$lang['hr_leaves_validate_mandatory_js_msg'] = '"The field " + fieldname + " is mandatory."';
+$lang['hr_leaves_validate_flash_msg_no_contract'] = 'It appears that you have no contract. Please contact your HR Officer / Manager.';
+$lang['hr_leaves_validate_flash_msg_overlap_period'] = 'You can\'t create a leave request for two yearly leave periods. Please create two different leave requests.';
 
 $lang['hr_overtime_title'] = 'List of overtime requests';
 $lang['hr_overtime_html_title'] = 'List of overtime requests for employee #';

@@ -7,7 +7,7 @@
  * @since         0.4.3
  */
 ?>
-<link href="<?php echo base_url();?>assets/css/tabular.css" rel="stylesheet">
+
 <h2><?php echo lang('calendar_year_title');?>&nbsp;<span class="muted">(<?php echo $employee_name;?>)</span>&nbsp;<?php echo $help;?></h2>
 
 <div class="row-fluid">
@@ -18,13 +18,13 @@
         <span class="label label-important" style="background-color: #ff0000;"><?php echo lang('Rejected');?></span>
     </div>
     <div class="span4">
-        <a href="<?php echo base_url();?>calendar/year/export/<?php echo $user_id;?>/<?php echo ($year);?>" class="btn btn-primary"><i class="fa fa-file-excel-o"></i>&nbsp;<?php echo lang('calendar_year_button_export');?></a>
+        <a href="<?php echo base_url();?>calendar/year/export/<?php echo $employee_id;?>/<?php echo ($year);?>" class="btn btn-primary"><i class="fa fa-file-excel-o"></i>&nbsp;<?php echo lang('calendar_year_button_export');?></a>
     </div>
     <div class="span4">
         <div class="pull-right">
-            <a href="<?php echo base_url();?>calendar/year/<?php echo $user_id;?>/<?php echo ($year - 1);?>" class="btn btn-primary"><i class="icon-chevron-left icon-white"></i></a>
+            <a href="<?php echo base_url();?>calendar/year/<?php echo $employee_id;?>/<?php echo ($year - 1);?>" class="btn btn-primary"><i class="icon-chevron-left icon-white"></i></a>
             <?php echo $year;?>
-            <a href="<?php echo base_url();?>calendar/year/<?php echo $user_id;?>/<?php echo ($year + 1);?>" class="btn btn-primary"><i class="icon-chevron-right icon-white"></i></a>
+            <a href="<?php echo base_url();?>calendar/year/<?php echo $employee_id;?>/<?php echo ($year + 1);?>" class="btn btn-primary"><i class="icon-chevron-right icon-white"></i></a>
         </div>
     </div>
 </div>
@@ -71,13 +71,15 @@
                 $status = $day->status;
                 $type = $day->type;
             }
-                //0 - Working day  _
-                //1 - All day           []
-                //2 - Morning        |\
-                //3 - Afternoon      /|
-                //4 - All Day Off       []
-                //5 - Morning Day Off   |\
-                //6 - Afternoon Day Off /|
+            //0 - Working day  _
+            //1 - All day           []
+            //2 - Morning        |\
+            //3 - Afternoon      /|
+            //4 - All Day Off       []
+            //5 - Morning Day Off   |\
+            //6 - Afternoon Day Off /|
+            //9 - Error in start/end types
+            if ($display == 9) echo '<td><img src="'.  base_url() .'assets/images/date_error.png"></td>';
             if ($display == 0) echo '<td>&nbsp;</td>';
             if ($display == 3 || $display == 6) echo '<td>&nbsp;</td>';
             if ($display == 4 || $display == 5) echo '<td title="' . $type .'" class="dayoff">&nbsp;</td>';
@@ -117,6 +119,7 @@
                 $status = $day->status;
                 $type = $day->type;
             }
+            if ($display == 9) echo '<td><img src="'.  base_url() .'assets/images/date_error.png"></td>';
             if ($display == 0) echo '<td>&nbsp;</td>';
             if ($display == 2 || $display == 5) echo '<td>&nbsp;</td>';
             if ($display == 4 || $display == 6) echo '<td title="' . $type .'" class="dayoff">&nbsp;</td>';

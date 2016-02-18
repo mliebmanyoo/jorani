@@ -51,6 +51,7 @@ class Calendar extends CI_Controller {
                 }
             }
             
+            $data['employee_id'] = $employee;
             $data['employee_name'] =  $user['firstname'] . ' ' . $user['lastname'];
             //Load the leaves for all the months of the selected year
             $this->load->model('leaves_model');
@@ -243,9 +244,11 @@ class Calendar extends CI_Controller {
      */
     public function tabular($id=-1, $month=0, $year=0, $children=TRUE) {
         if (($this->config->item('public_calendar') == TRUE) && (!$this->session->userdata('logged_in'))) {
-            $this->load->library('polyglot');;
+            $this->load->library('polyglot');
             $data['language'] = $this->config->item('language');
             $data['language_code'] =  $this->polyglot->language2code($data['language']);
+            $this->lang->load('global', $data['language']);
+            $this->lang->load('calendar', $data['language']);
             $this->load->model('leaves_model');
             $this->load->model('organization_model');
             $data['tabular'] = $this->leaves_model->tabular($id, $month, $year, $children);
@@ -261,6 +264,7 @@ class Calendar extends CI_Controller {
             $this->load->view('templates/footer_simple');
         } else {
             setUserContext($this);
+            $this->lang->load('global', $this->language);
             $this->lang->load('calendar', $this->language);
             $this->auth->checkIfOperationIsAllowed('organization_calendar');
             $data = getUserContext($this);

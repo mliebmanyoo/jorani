@@ -40,6 +40,7 @@
 
 //_______________________________________________
 //Admin : global features
+$route['admin/qrcode'] = 'admin/qrCode';
 $route['admin/settings'] = 'admin/settings';
 $route['admin'] = 'admin/settings';
 
@@ -61,8 +62,13 @@ $route['users'] = 'users';
 //_______________________________________________
 //Human Resources Management
 $route['hr/employees'] = 'hr/employees';
-$route['hr/employees/entity/(:num)/(:any)'] = 'hr/employeesOfEntity/$1/$2';
-$route['hr/employees/export/(:num)/(:any)'] = 'hr/exportEmployees/$1/$2';
+$route['hr/employees/entity/(:num)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'hr/employeesOfEntity/$1/$2/$3/$4/$5/$6/$7';
+$route['hr/employees/export/(:num)/(:any)/(:any)'] = 'hr/exportEmployees/$1/$2/$3';
+$route['hr/employees/edit/manager'] = 'hr/editManager';
+$route['hr/employees/edit/entity'] = 'hr/editEntity';
+$route['hr/employees/edit/contract'] = 'hr/editContract';
+$route['hr/employees/edit/entitlements'] = 'hr/editEntitlements';
+$route['hr/employees/create/leave'] = 'hr/createLeaveRequest';
 $route['hr/leaves/(:num)'] = 'hr/leaves/$1';
 $route['hr/leaves/export/(:num)'] = 'hr/exportLeaves/$1';
 $route['hr/overtime/(:num)'] = 'hr/overtime/$1';
@@ -177,6 +183,8 @@ $route['leaves'] = 'leaves';
 //_______________________________________________
 //leave requests (submitted to the line manager)
 $route['requests/collaborators'] = 'requests/collaborators';
+$route['requests/balance'] = 'requests/balance';
+$route['requests/balance/(:num)'] = 'requests/balance/$1';
 $route['requests/createleave/(:num)'] = 'requests/createleave/$1';
 $route['requests/counters/(:num)'] = 'requests/counters/$1';
 $route['requests/counters/(:num)/(:num)'] = 'requests/counters/$1/$2';
@@ -216,8 +224,6 @@ $route['entitleddays/contract/(:num)'] = 'entitleddays/contract/$1';
 $route['entitleddays/ajax/contract'] = 'entitleddays/ajax_contract';
 $route['entitleddays/contractdelete/(:num)'] = 'entitleddays/contractdelete/$1';
 $route['entitleddays/ajax/update'] = 'entitleddays/ajax_update';
-$route['entitleddays/organization'] = 'entitleddays/organization';
-$route['entitleddays/organization/credit'] = 'entitleddays/organizationAjaxCredit';
 
 //_______________________________________________
 //Reports
@@ -272,6 +278,14 @@ $route['session/logout'] = 'session/logout';
 $route['session/oauth2'] = 'session/loginOAuth2';
 $route['session/language'] = 'session/language';
 $route['session/forgetpassword'] = 'session/forgetpassword';
+
+//_______________________________________________
+//Experimental mobile endpoint
+$route['mobile/getPublicKey'] = 'mobile/getPublicKey';
+$route['mobile/login'] = 'mobile/login';
+$route['mobile/logout'] = 'mobile/logout';
+$route['mobile/notifications'] = 'mobile/notifications';
+$route['mobile/leaves/(:num)'] = 'mobile/leaves/$1';
 
 //_______________________________________________
 //Default controllers

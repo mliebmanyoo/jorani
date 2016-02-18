@@ -31,6 +31,7 @@ $lang['requests_collaborators_thead_link_create_leave'] = 'Create a leave reques
 $lang['requests_collaborators_thead_firstname'] = 'Vorname';
 $lang['requests_collaborators_thead_lastname'] = 'Nachname';
 $lang['requests_collaborators_thead_email'] = 'E-Mail';
+$lang['requests_collaborators_thead_identifier'] = 'Identifikator';
 
 $lang['requests_summary_title'] = 'Urlaubsstatistik für Angestellten #';
 $lang['requests_summary_thead_type'] = 'Art des Urlaubs';
@@ -75,3 +76,7 @@ $lang['requests_delegations_popup_delegate_button_cancel'] = 'Abbrechen';
 $lang['requests_delegations_confirm_delete_message'] = 'Sind Sie sicher, dass Sie die Delegation rückgängig machen möchten?';
 $lang['requests_delegations_confirm_delete_cancel'] = 'Abbrechen';
 $lang['requests_delegations_confirm_delete_yes'] = 'Ja';
+
+$lang['requests_balance_title'] = 'Leave balance (subordinates)';
+$lang['requests_balance_description'] = 'Leave balance of my direct report subordinates. If you are not a manager, this list will always be empty.';
+$lang['requests_balance_date_field'] = 'Date of report';

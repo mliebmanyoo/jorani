@@ -1,50 +1,67 @@
 If you want to contribute to the development of Jorani, here is a list of things to be implemented.
 I tried to sort them out by priority and to explicitly explain what is out of scope.
 
-## v0.4.4
+## v0.4.5
 
-- [X] Support half-days in Fullcalendar widget.
-- [X] USABILITY: Don't display 404 for broken links but a full page instead.
-- [X] Signin with Google+ as 3rd party OAuth2 provider.
-- [X] Add Ukrainian language.
-- [ ] Add Persian language.
-- [X] Add a better Khmer translation.
-- [X] Possibility to change the font of the application (HTML5).
-- [X] Prevent the creation of a leave request with a duration of 0.
-- [X] Possibility to disable the capitalization of lastname.
-- [X] BUG: Broken link in Leave request e-mail.
-- [X] BUG: ICS Feed is not working in global calendar (partly due to missing timezone var in PHP.ini).
-- [X] PERFORMANCE: Optimize autoloading (see composer for VObjects).
+- [ ] Multiple edit from HR/Employees page.
+- [X] Leave balance report for managers.
+- [X] Show list of days off in Leave request create/edit. Linked to #87.
+- [X] Leave request / day off overlapping detection. Linked to #87.
+- [X] Add Persian language.
+- [ ] Add Vietnamese language.
+- [X] Clarify usage of leave type 'compensate' (warning id edit/description in page).
+- [X] Improve robustness to bad conf. detect Database procedures and cal_days_in_month.
+- [X] BUG(87): Leave duration calculation wrong if a contract has a morning or an afternoon set as a non-work day.
+- [X] BUG: Entering reverse end/start date type for one day leave requests makes the calendars crash.
+- [X] Add an option to hide the inactive users into HR/Employee, next to "Include sub-departments".
+- [X] Clean Boostrap classes btn secondary
+- [ ] Remove duplicated string defs (moved into global): users_create_popup_manager_button_ok
+- [ ] Migrate all datatables to the new API ($().dataTable() to $().DataTable()).
+- [ ] Migrate all datatables to the new language initiatlization.
+- [ ] For all datatables, try to simplify the code with databinding.
+- [ ] Maybe user/index : Ajaxload.
+- [ ] Multiple creation of a leave request.
+- [ ] Maybe: swap a leave request / ask for change (-> back to Planned status or formal swap ?).
 
 ## v0.5.0 or later
 
 Following naming convention, this version will need a DB patch.
 
 - [ ] Fix wrong charset problem on table dayoffs.
-- [ ] More flexibility with date format (see forum).
 - [ ] Report carried-over leaves wizard : select an entity (change date), opt-in/out employees, check suggested report and go.
 - [ ] Mass apply entitled days to a group of employees. (organisation) - (employees in entity) <-> select.
 - [ ] Complete PHP triggers (add fruux lib to put CalDAV -> no : incomplete library).
 - [ ] Simplify Overtime entitlments.
 Maybe:
-- [ ] Update load test and its dataset.
 - [ ] Add a table to log the execution of services using the API (eg cron tasks) + a sample page in local to display them.
 - [ ] Possible DB optimization on leave table ALTER TABLE `leaves` ADD INDEX(`startdate`); ALTER TABLE `leaves` ADD INDEX(`enddate`);.
 - [ ] Possibility to sort the leave types. NEEDS DB PATCH (maybe). Cookie or DB ? Entity scope ?
-- [ ] Possibility to optionally exclude leave types to a contract. NEEDS DB PATCH (maybe). Impact leave request, should impact a dynamic build of leave balance report. 
+- [ ] Possibility to optionally exclude leave types to a contract. NEEDS DB PATCH (maybe). Impact leave request, should impact a dynamic build of leave balance report. What about type 0?
+- [ ] Possibility to optionally sort the leave types (contract-level, types not excluded).
 - [ ] Notification by e-mail : Request deleted / modified (maybe or report v0.5.0). We should maybe have basic objects to pass...
+- [ ] Better LDAP integration with an explorer and better/simpler binding method.
 
 ## Ideas
 
+- [ ] Export to Excel: export only the visible rows (POST with the list of Ids). Look into HR/Employees to see how to build the list.
 - [ ] Provide examples of REST clients (seniority leaves, carry over, LDAP sync...) in PHP (cron) or go (service).
 - [ ] PHP scripts of migration from OrangeHRM, PHP_Conges, LiberTempo, etc.
+- [ ] More OAuth2 or SAML identity providers (Investigation for a CAS/SSO integration).
+- [ ] Option/Config: kind of multi-tenancy filter on entity and its children the calendars (then calendar/global should be hidden).
+- [ ] Color set/stripes for color blind people, eg. :
+
+Code sample:
+
+        /*Status for color-blind people*/
+        .rejected-color-blind {
+            /*background-color: #ff0000;*/
+            background-image: linear-gradient(90deg, transparent 50%, rgba(255,255,255,.5) 50%);
+            background-size: 10px 10px;
+        }
 
 ## Not a priority
 
 - [ ] Supporting docs (upload attachments into local folder).
-- [ ] Better LDAP integration.
-- [ ] Investigation for a CAS/SSO integration.
-- [ ] Mobile-optimized views (limited to few pages : simple user and validation).
 - [ ] Implement a kind of heritage in HR/organization for supervisors (child entities).
 - [ ] HR officers of a part of the organization (defined in HR/organization), for future functions when they'll be CCed. and/or ...
 - [ ] ... Multitenancy (add global filter / Additionnal field on all tables). Allow access to the same instance for multiple tenants.
@@ -57,6 +74,7 @@ request a leave even if your credit is negative and because leave balance report
 
 ## Post v1.0
 
+- [ ] Mobile-optimized views (limited to few pages : simple user and validation).
 - [ ] Simplified time tracking. Not sure because Jorani is specialized in LMS. Maybe a side project ?
 
 ## Might not be implemented

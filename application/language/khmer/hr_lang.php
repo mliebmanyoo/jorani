@@ -25,6 +25,9 @@ $lang['hr_employees_thead_email'] = 'ម៉ែល';
 $lang['hr_employees_thead_entity'] = 'អង្គភាព';
 $lang['hr_employees_thead_contract'] = 'ខសន្យា';
 $lang['hr_employees_thead_manager'] = 'អ្នកគ្រប់គ្រង';
+$lang['hr_employees_thead_identifier'] = 'ឯកសារកំណត់អត្តសញ្ញាណ';
+$lang['hr_employees_thead_datehired'] = 'កាលបរិច្ឆេទជួល';
+$lang['hr_employees_thead_position'] = 'មុខតំណែង';
 $lang['hr_employees_button_create_user'] = 'បង្កើត';
 $lang['hr_employees_button_export'] = 'បញ្ជីនាំចេញ';
 $lang['hr_employees_popup_entitlment_title'] = 'ថ្ងៃផ្ដល់សិទ្ធិឲ្យឈប់';
@@ -37,6 +40,22 @@ $lang['hr_employees_popup_entity_button_ok'] = 'យល់ព្រម';
 $lang['hr_employees_popup_entity_button_cancel'] = 'បោះបង់';
 $lang['hr_employees_description'] = 'ចុចកណ្តុរខាងស្តាំ / ចុចសង្កត់ឱ្យជាប់ទៅលើនិយោជិកណាម្នាក់ ដើម្បីបង្ហាញមីនុយសកម្មភាព';
 $lang['hr_employees_field_subdepts'] = 'រួមបញ្ចូលអនុផ្នែក';
+
+$lang['hr_employees_button_all'] = 'All';
+$lang['hr_employees_button_active'] = 'Active';
+$lang['hr_employees_button_inactive'] = 'Inactive';
+$lang['hr_employees_button_selection'] = 'Selection';
+$lang['hr_employees_button_select_all'] = 'Select all';
+$lang['hr_employees_button_deselect_all'] = 'Deselect all';
+$lang['hr_employees_button_select_manager'] = 'Select Manager';
+$lang['hr_employees_button_select_contract'] = 'Select Contract';
+$lang['hr_employees_button_select_entity'] = 'Select Entity';
+$lang['hr_employees_popup_contract_title'] = 'Select Contract';
+$lang['hr_employees_button_entitleddays'] = 'Entitled days';
+$lang['hr_employees_button_create_request'] = 'Submit a leave request';
+
+$lang['hr_employees_popup_manager_title'] = 'Select the manager';
+$lang['hr_employees_multiple_edit_selection_msg'] = 'You must select at least one employee into the table';
 
 $lang['hr_export_employees_title'] = 'បញ្ជីនៃបុគ្គលិក';
 $lang['hr_export_employees_thead_id'] = 'លេខអត្តសញ្ញាណ';
@@ -86,9 +105,13 @@ $lang['hr_leaves_create_field_cause'] = 'មូលហេតុ(មានក៏�
 $lang['hr_leaves_create_field_status'] = 'ស្ថានភាព';
 $lang['hr_leaves_create_button_create'] = 'ស្នើរសុំការឈប់សម្រាក';
 $lang['hr_leaves_create_button_cancel'] = 'បោះបង់';
-
 $lang['hr_leaves_create_flash_msg_success'] = 'ការស្នើរសុំឈប់សម្រាកត្រូវបានបង្កើតដោយជោគជ័យ';
 $lang['hr_leaves_create_flash_msg_error'] = 'ការស្នើរសុំឈប់សម្រាកត្រូវបានបង្កើតឬធ្វើបច្ចុប្បន្នភាពដោយជោគជ័យ, ប៉ុន្តែលោកអ្នកមិនមានអ្នកគ្រប់គ្រងទេ។';
+$lang['hr_leaves_flash_spn_list_days_off'] = '%s non-working days in the period';
+$lang['hr_leaves_flash_msg_overlap_dayoff'] = 'Your leave request matches with a non-working day.';
+$lang['hr_leaves_validate_mandatory_js_msg'] = '"កាឡោន​ " + fieldname + " គី​ចំាបាច់"';
+$lang['hr_leaves_validate_flash_msg_no_contract'] = 'ទំនងជាអ្នកមិនមនាកិច្ចសន្យាទេ។ សូមទំនាក់ទំនងមន្ត្រីធនធានមនុស្យ / អ្នកគ្រប់គ្រងរបស់អ្នក។';
+$lang['hr_leaves_validate_flash_msg_overlap_period'] = 'លោកអ្នកមិនអាចបង្កើតការស្នើរសុំឈប់សម្រាកសម្រាប់រយៈពេលពីរឆ្នាំបានទេ។ សូមបង្កើតការស្នើរសុំឈប់សម្រាកពីរផ្សេងគ្នា។';
 
 $lang['hr_overtime_title'] = 'បញ្ជីនៃសំណើសុំក្រៅម៉ោង';
 $lang['hr_overtime_html_title'] = 'សំណើបន្ថែមម៉ោងរបស់បគ្គលិក #';

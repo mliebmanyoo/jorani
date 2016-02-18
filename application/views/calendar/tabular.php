@@ -6,12 +6,8 @@
  * @link            https://github.com/bbalet/jorani
  * @since         0.3.0
  */
+?>
 
-CI_Controller::get_instance()->load->helper('language');
-$this->lang->load('calendar', $language);
-$this->lang->load('global', $language);?>
-
-<link href="<?php echo base_url();?>assets/css/tabular.css" rel="stylesheet">
 <h2><?php echo lang('calendar_tabular_title');?> &nbsp;<?php echo $help;?></h2>
 
 <div class="row-fluid">
@@ -158,6 +154,7 @@ $this->lang->load('global', $language);?>
                 }
           } else {
             switch ($day->display) {
+                case '9': $class="error"; break;
                 case '0': $class="working"; break;
                 case '4': $class="dayoff"; break;
                 case '5': $class="amdayoff"; break;
@@ -202,10 +199,14 @@ $this->lang->load('global', $language);?>
                         $overlapping = TRUE;
               break;
           }
-            if ($overlapping) {
-                echo '<td title="' . $day->type . '"><img src="' . base_url() . 'assets/images/date_error.png"></td>';
+            if ($class == "error"){
+                echo '<td><img src="'.  base_url() .'assets/images/date_error.png"></td>';
             } else {
-                echo '<td title="' . $day->type . '" class="' . $class . '">&nbsp;</td>';
+                if ($overlapping) {
+                    echo '<td title="' . $day->type . '" class="' . $class . '"><img src="' . base_url() . 'assets/images/date_error.png"></td>';
+                } else {
+                    echo '<td title="' . $day->type . '" class="' . $class . '">&nbsp;</td>';
+                }
             }
             ?>
     <?php } ?>
@@ -251,8 +252,8 @@ $this->lang->load('global', $language);?>
         <img src="<?php echo base_url();?>assets/images/loading.gif">
     </div>
     <div class="modal-footer">
-        <a href="#" onclick="select_entity();" class="btn secondary"><?php echo lang('calendar_tabular_popup_entity_button_ok');?></a>
-        <a href="#" onclick="$('#frmSelectEntity').modal('hide');" class="btn secondary"><?php echo lang('calendar_tabular_popup_entity_button_cancel');?></a>
+        <a href="#" onclick="select_entity();" class="btn"><?php echo lang('calendar_tabular_popup_entity_button_ok');?></a>
+        <a href="#" onclick="$('#frmSelectEntity').modal('hide');" class="btn"><?php echo lang('calendar_tabular_popup_entity_button_cancel');?></a>
     </div>
 </div>
 

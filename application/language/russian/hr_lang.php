@@ -25,6 +25,9 @@ $lang['hr_employees_thead_email'] = 'Эл. почта';
 $lang['hr_employees_thead_entity'] = 'Отдел';
 $lang['hr_employees_thead_contract'] = 'Контракт';
 $lang['hr_employees_thead_manager'] = 'Руководитель';
+$lang['hr_employees_thead_identifier'] = 'Идентификатор';
+$lang['hr_employees_thead_datehired'] = 'Дата принятия на работу';
+$lang['hr_employees_thead_position'] = 'Должность';
 $lang['hr_employees_button_create_user'] = 'Создать';
 $lang['hr_employees_button_export'] = 'Экспортировать список';
 $lang['hr_employees_popup_entitlment_title'] = 'Предоставляемые дни';
@@ -37,6 +40,22 @@ $lang['hr_employees_popup_entity_button_ok'] = 'Ок';
 $lang['hr_employees_popup_entity_button_cancel'] = 'Отмена';
 $lang['hr_employees_description'] = 'Щелкните правой кнопкой мыши/нажмите на работнике для вызова контекстного меню.';
 $lang['hr_employees_field_subdepts'] = 'Включая подотделы';
+
+$lang['hr_employees_button_all'] = 'All';
+$lang['hr_employees_button_active'] = 'Active';
+$lang['hr_employees_button_inactive'] = 'Inactive';
+$lang['hr_employees_button_selection'] = 'Selection';
+$lang['hr_employees_button_select_all'] = 'Select all';
+$lang['hr_employees_button_deselect_all'] = 'Deselect all';
+$lang['hr_employees_button_select_manager'] = 'Select Manager';
+$lang['hr_employees_button_select_contract'] = 'Select Contract';
+$lang['hr_employees_button_select_entity'] = 'Select Entity';
+$lang['hr_employees_popup_contract_title'] = 'Select Contract';
+$lang['hr_employees_button_entitleddays'] = 'Entitled days';
+$lang['hr_employees_button_create_request'] = 'Submit a leave request';
+
+$lang['hr_employees_popup_manager_title'] = 'Select the manager';
+$lang['hr_employees_multiple_edit_selection_msg'] = 'You must select at least one employee into the table';
 
 $lang['hr_export_employees_title'] = 'Список сотрудников';
 $lang['hr_export_employees_thead_id'] = 'ID';
@@ -88,6 +107,11 @@ $lang['hr_leaves_create_button_create'] = 'Запросить отпуск';
 $lang['hr_leaves_create_button_cancel'] = 'Отмена';
 $lang['hr_leaves_create_flash_msg_success'] = 'Заявление на отпуск успешно создано.';
 $lang['hr_leaves_create_flash_msg_error'] = 'The leave request has been succesfully created or updated, but you don\'t have a manager.';
+$lang['hr_leaves_flash_spn_list_days_off'] = '%s non-working days in the period';
+$lang['hr_leaves_flash_msg_overlap_dayoff'] = 'Your leave request matches with a non-working day.';
+$lang['hr_leaves_validate_mandatory_js_msg'] = '"Поле " + fieldname + " является обязательным."';
+$lang['hr_leaves_validate_flash_msg_no_contract'] = 'Похоже вы не имеете контракта. Обратитесь к своему руководителю.';
+$lang['hr_leaves_validate_flash_msg_overlap_period'] = 'Вы не можете создать заявление на отпуск для разных годов.  Пожалуйста, создайте два разных заявления на отпуск.';
 
 $lang['hr_overtime_title'] = 'Список запросов на сверхурочную работу';
 $lang['hr_overtime_html_title'] = 'Список запросов сверхурочных, для сотрудника N°';

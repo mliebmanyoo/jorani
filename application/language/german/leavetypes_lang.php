@@ -9,6 +9,8 @@
  */
 
 $lang['leavetypes_type_title'] = 'Abwesenheitsarten';
+$lang['leavetypes_type_description'] = 'Leave type #0 is a system type reserved for overtime management. You should not use it for other requests.';
+$lang['leavetypes_type_confirm_rename'] = 'Leave type #0 is a system type reserved for overtime management. Are you sure that you want to rename it?';
 $lang['leavetypes_type_thead_id'] = 'ID';
 $lang['leavetypes_type_thead_name'] = 'Name';
 $lang['leavetypes_type_thead_tip_delete'] = 'löschen';
@@ -16,6 +18,8 @@ $lang['leavetypes_type_thead_tip_edit'] = 'bearbeiten';
 $lang['leavetypes_type_button_export'] = 'Diese Liste exportieren';
 $lang['leavetypes_type_button_create'] = 'Neue Art erstellen';
 $lang['leavetypes_type_not_found'] = 'Keine Abwesenheitsart in Datenbank gefunden';
+
+$lang['leavetypes_js_unique_error_msg'] = 'This leave type already exists.';
 
 $lang['leavetypes_popup_create_title'] = 'Abwesenheitsart hinzufügen';
 $lang['leavetypes_popup_create_button_cancel'] = 'Abbrechen';

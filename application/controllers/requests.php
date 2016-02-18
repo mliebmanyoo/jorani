@@ -241,11 +241,13 @@ class Requests extends CI_Controller {
             $this->form_validation->set_rules('status', lang('hr_leaves_create_field_status'), 'required|xss_clean|strip_tags');
 
             $data['credit'] = 0;
+            $default_type = $this->config->item('default_leave_type');
+            $default_type = $default_type == FALSE ? 0 : $default_type;
             if ($this->form_validation->run() === FALSE) {
                 $this->load->model('types_model');
                 $data['types'] = $this->types_model->getTypes();
                 foreach ($data['types'] as $type) {
-                    if ($type['id'] == 0) {
+                    if ($type['id'] == $default_type) {
                         $data['credit'] = $this->leaves_model->getLeavesTypeBalanceForEmployee($id, $type['name']);
                         break;
                     }
@@ -327,5 +329,59 @@ class Requests extends CI_Controller {
         $this->load->library('excel');
         $data['filter'] = $filter;
         $this->load->view('requests/export', $data);
+    }
+    
+    /**
+     * Leave balance report limited to the subordinates of the connected manager
+     * Status is submitted or accepted/rejected depending on the filter parameter.
+     * @param int $dateTmp (Timestamp) date of report
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function balance($dateTmp = NULL) {
+        $this->auth->checkIfOperationIsAllowed('list_requests');
+        $data = getUserContext($this);
+        $this->lang->load('datatable', $this->language);
+        $data['title'] = lang('requests_balance_title');
+        $data['help'] = $this->help->create_help_link('global_link_doc_page_leave_balance_report');
+        
+        if ($dateTmp === NULL) {
+            $refDate = date("Y-m-d");
+            $data['isDefault'] = 1;
+        } else {
+            $refDate = date("Y-m-d", $dateTmp);
+            $data['isDefault'] = 0;
+        }
+        $data['refDate'] = $refDate;
+
+        $this->load->model('types_model');
+        $data['types'] = $this->types_model->getTypes();
+        
+        $result = array();
+        $this->load->model('users_model');
+        $users = $this->users_model->getCollaboratorsOfManager($this->user_id);
+        foreach ($users as $user) {
+            $result[$user['id']]['identifier'] = $user['identifier'];
+            $result[$user['id']]['firstname'] = $user['firstname'];
+            $result[$user['id']]['lastname'] = $user['lastname'];
+            $date = new DateTime($user['datehired']);
+            $result[$user['id']]['datehired'] = $date->format(lang('global_date_format'));
+            $result[$user['id']]['position'] = $user['position_name'];
+            foreach ($data['types'] as $type) {
+                $result[$user['id']][$type['name']] = '';
+            }
+            
+            $summary = $this->leaves_model->getLeaveBalanceForEmployee($user['id'], TRUE, $refDate);
+            if (count($summary) > 0 ) {
+                foreach ($summary as $key => $value) {
+                    $result[$user['id']][$key] = round($value[1] - $value[0], 3, PHP_ROUND_HALF_DOWN);
+                }
+            }
+        }
+        $data['result'] = $result;
+        
+        $this->load->view('templates/header', $data);
+        $this->load->view('menu/index', $data);
+        $this->load->view('requests/balance', $data);
+        $this->load->view('templates/footer');
     }
 }

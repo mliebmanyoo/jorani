@@ -30,6 +30,7 @@ $lang['requests_collaborators_thead_link_create_leave'] = 'Créer une demande de
 $lang['requests_collaborators_thead_firstname'] = 'Prénom';
 $lang['requests_collaborators_thead_lastname'] = 'Nom';
 $lang['requests_collaborators_thead_email'] = 'E-mail';
+$lang['requests_collaborators_thead_identifier'] = 'Identifiant';
 
 $lang['requests_summary_title'] = 'Etat des congés pour l\'utilisateur #';
 $lang['requests_summary_thead_type'] = 'Type de congé';
@@ -74,3 +75,7 @@ $lang['requests_delegations_popup_delegate_button_cancel'] = 'Annuler';
 $lang['requests_delegations_confirm_delete_message'] = 'Etes vous sûr de vouloir révoquer cette délégation ?';
 $lang['requests_delegations_confirm_delete_cancel'] = 'Annuler';
 $lang['requests_delegations_confirm_delete_yes'] = 'Oui';
+
+$lang['requests_balance_title'] = 'État des congés (collaborateurs)';
+$lang['requests_balance_description'] = 'État des congés de mes collaborateurs. Si vous n\'êtes pas un manager, cette liste sera vide.';
+$lang['requests_balance_date_field'] = 'Date du rapport';

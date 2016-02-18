@@ -50,8 +50,12 @@ $lang['leaves_create_field_cause'] = 'Motivazione (opzionale)';
 $lang['leaves_create_field_status'] = 'Stato';
 $lang['leaves_create_button_create'] = 'Richiedi ferie';
 $lang['leaves_create_button_cancel'] = 'Annulla';
+
 $lang['leaves_create_flash_msg_success'] = 'La richiesta di ferie è stata creata con successo';
 $lang['leaves_create_flash_msg_error'] = 'La richiesta di ferie è stata creata con successo oppure aggiornata, ma non hai un manager.';
+
+$lang['leaves_flash_spn_list_days_off'] = '%s non-working days in the period';
+$lang['leaves_flash_msg_overlap_dayoff'] = 'Your leave request matches with a non-working day.';
 
 $lang['leaves_edit_html_title'] = 'Modifica una richiesta di ferie';
 $lang['leaves_edit_title'] = 'Modifica richiesta di ferie #';
@@ -70,6 +74,7 @@ $lang['leaves_edit_flash_msg_success'] = 'La richiesta di ferie è stata aggiorn
 $lang['leaves_validate_mandatory_js_msg'] = '"Il campo " + fieldname + " è obbligatorio."';
 $lang['leaves_validate_flash_msg_no_contract'] = 'Sembra che tu non abbia un contratto. Sei pregato di contattare il tuo responsabile delle Risorse Umane / Manager';
 $lang['leaves_validate_flash_msg_overlap_period'] = 'Non è possibile creare una richiesta di congedo per due periodi di ferie annuali. Si prega di creare due diverse richieste di ferie.';
+
 $lang['leaves_delete_flash_msg_error'] = 'Non puoi cancellare questa richiesta di ferie';
 $lang['leaves_delete_flash_msg_success'] = 'La richiesta di ferie è stata cancellata con successo';
 $lang['leaves_view_title'] = 'Vedi richiesta di ferie #';

@@ -9,6 +9,8 @@
  */
 
 $lang['leavetypes_type_title'] = 'Tipos de permisos';
+$lang['leavetypes_type_description'] = 'Leave type #0 is a system type reserved for overtime management. You should not use it for other requests.';
+$lang['leavetypes_type_confirm_rename'] = 'Leave type #0 is a system type reserved for overtime management. Are you sure that you want to rename it?';
 $lang['leavetypes_type_thead_id'] = 'ID';
 $lang['leavetypes_type_thead_name'] = 'Nombre';
 $lang['leavetypes_type_thead_tip_delete'] = 'suprimir';
@@ -17,16 +19,20 @@ $lang['leavetypes_type_button_export'] = 'Exporta a listado';
 $lang['leavetypes_type_button_create'] = 'Crear un nuevo tipo';
 $lang['leavetypes_type_not_found'] = 'No existen ningún tipo de permiso.';
 
+$lang['leavetypes_js_unique_error_msg'] = 'This leave type already exists.';
+
 $lang['leavetypes_popup_create_title'] = 'Añade un tipo de permiso';
 $lang['leavetypes_popup_create_button_cancel'] = 'Cancelar';
 $lang['leavetypes_popup_create_button_create'] = 'Crear';
 $lang['leavetypes_popup_create_field_name'] = 'Nombre';
 $lang['leavetypes_popup_create_flash_msg'] = 'El tipo de permiso ha sido creado correctamente.';
+
 $lang['leavetypes_popup_update_title'] = 'Editar un tipo de permiso';
 $lang['leavetypes_popup_update_button_cancel'] = 'Cancelar';
 $lang['leavetypes_popup_update_button_update'] = 'Modificar';
 $lang['leavetypes_popup_update_field_name'] = 'Nombre';
 $lang['leavetypes_popup_update_flash_msg'] = 'El tipo de permiso ha sido modificado correctamente.';
+
 $lang['leavetypes_popup_delete_title'] = 'Borrar el tipo de permiso';
 $lang['leavetypes_popup_delete_description'] = 'Estás a punto de eliminar un tipo de permiso, este acción no se puede deshacer.';
 $lang['leavetypes_popup_delete_confirm'] = '¿Quieres continuar?';

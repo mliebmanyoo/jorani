@@ -31,6 +31,7 @@ $lang['requests_collaborators_thead_link_create_leave'] = 'Створити за
 $lang['requests_collaborators_thead_firstname'] = 'Ім\'я';
 $lang['requests_collaborators_thead_lastname'] = 'Прізвище';
 $lang['requests_collaborators_thead_email'] = 'Ел. пошта';
+$lang['requests_collaborators_thead_identifier'] = 'Ідентифікатор';
 
 $lang['requests_summary_title'] = 'Сальдо по відпустках для працівника №';
 $lang['requests_summary_thead_type'] = 'Тип відпустки';
@@ -74,3 +75,7 @@ $lang['requests_delegations_popup_delegate_button_cancel'] = 'Скасувати
 $lang['requests_delegations_confirm_delete_message'] = 'Ви впевнені, що хочете відкликати це повноваження?';
 $lang['requests_delegations_confirm_delete_cancel'] = 'Скасувати';
 $lang['requests_delegations_confirm_delete_yes'] = 'Так';
+
+$lang['requests_balance_title'] = 'Leave balance (subordinates)';
+$lang['requests_balance_description'] = 'Leave balance of my direct report subordinates. If you are not a manager, this list will always be empty.';
+$lang['requests_balance_date_field'] = 'Date of report';

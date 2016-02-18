@@ -80,7 +80,7 @@ class Leaves_model extends CI_Model {
     /**
      * Try to calculate the length of a leave using the start and and date of the leave
      * and the non working days defined on a contract
-     * @param int $employee
+     * @param int $employee Identifier of the employee
      * @param date $start start date of the leave request
      * @param date $end end date of the leave request
      * @param string $startdatetype start date type of leave request being created (Morning or Afternoon)
@@ -111,6 +111,96 @@ class Leaves_model extends CI_Model {
                 return $numberDays;
             }
         }
+    }
+    
+    /**
+     * Calculate the actual length of a leave request by taking into account the non-working days
+     * Detect overlapping with non-working days. It returns a K/V arrays of 3 items.
+     * @param int $employee Identifier of the employee
+     * @param date $startdate start date of the leave request
+     * @param date $enddate end date of the leave request
+     * @param string $startdatetype start date type of leave request being created (Morning or Afternoon)
+     * @param string $enddatetype end date type of leave request being created (Morning or Afternoon)
+     * @param array List of non-working days
+     * @return array (length=>length of leave, overlapping=>excat match with a non-working day, daysoff=>sum of days off)
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function actualLengthAndDaysOff($employee, $startdate, $enddate, $startdatetype, $enddatetype, $daysoff) {
+        $startDateObject = DateTime::createFromFormat('Y-m-d H:i:s', $startdate . ' 00:00:00');
+        $endDateObject = DateTime::createFromFormat('Y-m-d H:i:s', $enddate . ' 00:00:00');
+        $iDate = clone $startDateObject;
+
+        //Simplify logic
+        if ($startdate == $enddate) $one_day = TRUE; else $one_day = FALSE;
+        if ($startdatetype == 'Morning') $start_morning = TRUE; else $start_morning = FALSE;
+        if ($startdatetype == 'Afternoon') $start_afternoon = TRUE; else $start_afternoon = FALSE;
+        if ($enddatetype == 'Morning') $end_morning = TRUE; else $end_morning = FALSE;
+        if ($enddatetype == 'Afternoon') $end_afternoon = TRUE; else $end_afternoon = FALSE;
+
+        //Iteration between start and end dates of the leave request
+        $lengthDaysOff = 0;
+        $length = 0;
+        $hasDayOff = FALSE;
+        $overlapDayOff = FALSE;
+        while ($iDate <= $endDateObject)
+        {
+            if ($iDate == $startDateObject) $first_day = TRUE; else $first_day = FALSE;
+            $isDayOff = FALSE;
+            //Iterate on the list of days off with two objectives:
+            // - Compute sum of days off between the two dates
+            // - Detect if the leave request exactly overlaps with a day off
+            foreach ($daysoff as $dayOff) {
+                $dayOffObject = DateTime::createFromFormat('Y-m-d H:i:s', $dayOff['date'] . ' 00:00:00');
+                if ($dayOffObject == $iDate) {
+                    $lengthDaysOff+=$dayOff['length'];
+                    $isDayOff = TRUE;
+                    $hasDayOff = TRUE;
+                    switch ($dayOff['type']) {
+                        case 1: //1 : All day
+                            if ($one_day && $start_morning && $end_afternoon && $first_day)
+                                $overlapDayOff = TRUE;
+                            break;
+                        case 2: //2 : Morning
+                            if ($one_day && $start_morning && $end_morning && $first_day)
+                                $overlapDayOff = TRUE;
+                            else
+                                $length+=0.5;
+                            break;
+                        case 3: //3 : Afternnon
+                            if ($one_day && $start_afternoon && $end_afternoon && $first_day)
+                                $overlapDayOff = TRUE;
+                            else
+                                $length+=0.5;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+            }
+            if (!$isDayOff) {
+                if ($one_day) {
+                    if ($start_morning && $end_afternoon) $length++;
+                    if ($start_morning && $end_morning) $length+=0.5;
+                    if ($start_afternoon && $end_afternoon) $length+=0.5;
+                } else {
+                    if ($iDate == $endDateObject) $last_day = TRUE; else $last_day = FALSE;
+                    if (!$first_day && !$last_day) $length++;
+                    if ($first_day && $start_morning) $length++;
+                    if ($first_day && $start_afternoon) $length+=0.5;
+                    if ($last_day && $end_morning) $length+=0.5;
+                    if ($last_day && $end_afternoon) $length++;
+                }
+                $overlapDayOff = FALSE;
+            }
+            $iDate->modify('+1 day');   //Next day
+        }
+
+        //Other obvious cases of overlapping
+        if ($hasDayOff && ($length == 0)) {
+            $overlapDayOff = TRUE;
+        }
+        return array('length' => $length, 'daysoff' => $lengthDaysOff, 'overlapping' => $overlapDayOff);
     }
     
     /**
@@ -312,7 +402,7 @@ class Leaves_model extends CI_Model {
     /**
      * Create a leave request
      * @param int $id Identifier of the employee
-     * @return int id of the newly acreated leave request into the db
+     * @return int id of the newly created leave request into the db
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
     public function setLeaves($id) {
@@ -330,6 +420,38 @@ class Leaves_model extends CI_Model {
         $this->db->insert('leaves', $data);
         return $this->db->insert_id();
     }
+    
+    /**
+     * Create the same leave request for a list of employees
+     * @param int $type Identifier of the leave type
+     * @param float $duration duration of the leave
+     * @param string $startdate Start date (MySQL format YYYY-MM-DD)
+     * @param string $enddate End date (MySQL format YYYY-MM-DD)
+     * @param string $startdatetype Start date type of the leave (Morning/Afternoon)
+     * @param string $enddatetype End date type of the leave (Morning/Afternoon)
+     * @param string $cause Identifier of the leave
+     * @param int $status status of the leave
+     * @param array $employees List of DB Ids of the affected employees
+     * @return int Result
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function createRequestForUserList($type, $duration, $startdate, $enddate,
+                    $startdatetype, $enddatetype, $cause, $status, $employees) {
+        $data = array();
+        foreach ($employees as $id) {
+            $data[] = array(
+                'startdate' => $this->input->post('startdate'),
+                'startdatetype' => $this->input->post('startdatetype'),
+                'enddate' => $this->input->post('enddate'),
+                'enddatetype' => $this->input->post('enddatetype'),
+                'duration' => abs($this->input->post('duration')),
+                'type' => $this->input->post('type'),
+                'cause' => $this->input->post('cause'),
+                'status' => $this->input->post('status'),
+                'employee' => $id);
+        }
+        return $this->db->insert_batch('leaves', $data); 
+    }
 
     /**
      * Create a leave request (suitable for API use)
@@ -340,7 +462,7 @@ class Leaves_model extends CI_Model {
      * @param string $cause Optional reason of the leave
      * @param string $startdatetype Start date type (Morning/Afternoon)
      * @param string $enddatetype End date type (Morning/Afternoon)
-     * @param int $duration Length of the leave request
+     * @param float $duration duration of the leave request
      * @param int $type Type of leave (except compensate, fully customizable by user)
      * @return int id of the newly acreated leave request into the db
      * @author Benjamin BALET <benjamin.balet@gmail.com>
@@ -442,8 +564,7 @@ class Leaves_model extends CI_Model {
         $this->db->select('leaves.*, types.name as type');
         $this->db->join('types', 'leaves.type = types.id');
         $this->db->where('employee', $user_id);
-        $this->db->where('( (leaves.startdate <= DATE(' . $this->db->escape($start) . ') AND leaves.enddate >= DATE(' . $this->db->escape($start) . '))' .
-                                  ' OR (leaves.startdate >= DATE(' . $this->db->escape($start) . ') AND leaves.enddate <= DATE(' . $this->db->escape($end) . ')) )');
+        $this->db->where('(leaves.startdate <= DATE(' . $this->db->escape($end) . ') AND leaves.enddate >= DATE(' . $this->db->escape($start) . '))');
         $this->db->order_by('startdate', 'desc');
         $this->db->limit(1024);  //Security limit
         $events = $this->db->get('leaves')->result();
@@ -463,6 +584,19 @@ class Leaves_model extends CI_Model {
                 $enddate = $entry->enddate . 'T18:00:00';
             }
             
+            $imageUrl = '';
+            $allDay = FALSE;
+            $startdatetype =  $entry->startdatetype;
+            $enddatetype = $entry->enddatetype;
+            if ($startdate == $enddate) { //Deal with invalid start/end date
+                $imageUrl = base_url() . 'assets/images/date_error.png';
+                $startdate = $entry->startdate . 'T07:00:00';
+                $enddate = $entry->enddate . 'T18:00:00';
+                $startdatetype = "Morning";
+                $enddatetype = "Afternoon";
+                $allDay = TRUE;
+            }
+            
             switch ($entry->status)
             {
                 case 1: $color = '#999'; break;     // Planned
@@ -474,12 +608,13 @@ class Leaves_model extends CI_Model {
             $jsonevents[] = array(
                 'id' => $entry->id,
                 'title' => $entry->type,
+                'imageurl' => $imageUrl,
                 'start' => $startdate,
                 'color' => $color,
-                'allDay' => FALSE,
+                'allDay' => $allDay,
                 'end' => $enddate,
-                'startdatetype' => $entry->startdatetype,
-                'enddatetype' => $entry->enddatetype
+                'startdatetype' => $startdatetype,
+                'enddatetype' => $enddatetype
             );
         }
         return json_encode($jsonevents);
@@ -497,8 +632,7 @@ class Leaves_model extends CI_Model {
         $this->db->join('users', 'users.id = leaves.employee');
         $this->db->where('users.manager', $user_id);
         $this->db->where('leaves.status != ', 4);       //Exclude rejected requests
-        $this->db->where('( (leaves.startdate <= DATE(' . $this->db->escape($start) . ') AND leaves.enddate >= DATE(' . $this->db->escape($start) . '))' .
-                                   ' OR (leaves.startdate >= DATE(' . $this->db->escape($start) . ') AND leaves.enddate <= DATE(' . $this->db->escape($end) . ')))');
+        $this->db->where('(leaves.startdate <= DATE(' . $this->db->escape($end) . ') AND leaves.enddate >= DATE(' . $this->db->escape($start) . '))');
         $this->db->order_by('startdate', 'desc');
         $this->db->limit(1024);  //Security limit
         $events = $this->db->get('leaves')->result();
@@ -517,6 +651,19 @@ class Leaves_model extends CI_Model {
                 $enddate = $entry->enddate . 'T18:00:00';
             }
             
+            $imageUrl = '';
+            $allDay = FALSE;
+            $startdatetype =  $entry->startdatetype;
+            $enddatetype = $entry->enddatetype;
+            if ($startdate == $enddate) { //Deal with invalid start/end date
+                $imageUrl = base_url() . 'assets/images/date_error.png';
+                $startdate = $entry->startdate . 'T07:00:00';
+                $enddate = $entry->enddate . 'T18:00:00';
+                $startdatetype = "Morning";
+                $enddatetype = "Afternoon";
+                $allDay = TRUE;
+            }
+            
             switch ($entry->status)
             {
                 case 1: $color = '#999'; break;     // Planned
@@ -528,12 +675,13 @@ class Leaves_model extends CI_Model {
             $jsonevents[] = array(
                 'id' => $entry->id,
                 'title' => $entry->firstname .' ' . $entry->lastname,
+                'imageurl' => $imageUrl,
                 'start' => $startdate,
                 'color' => $color,
-                'allDay' => FALSE,
+                'allDay' => $allDay,
                 'end' => $enddate,
-                'startdatetype' => $entry->startdatetype,
-                'enddatetype' => $entry->enddatetype
+                'startdatetype' => $startdatetype,
+                'enddatetype' => $enddatetype
             );
         }
         return json_encode($jsonevents);
@@ -550,8 +698,7 @@ class Leaves_model extends CI_Model {
     public function collaborators($user_id, $start = "", $end = "") {
         $this->db->join('users', 'users.id = leaves.employee');
         $this->db->where('users.manager', $user_id);
-        $this->db->where('( (leaves.startdate <= DATE(' . $this->db->escape($start) . ') AND leaves.enddate >= DATE(' . $this->db->escape($start) . '))' .
-                                ' OR (leaves.startdate >= DATE(' . $this->db->escape($start) . ') AND leaves.enddate <= DATE(' . $this->db->escape($end) . ')) )');
+        $this->db->where('(leaves.startdate <= DATE(' . $this->db->escape($end) . ') AND leaves.enddate >= DATE(' . $this->db->escape($start) . '))');
         $this->db->order_by('startdate', 'desc');
         $this->db->limit(1024);  //Security limit
         $events = $this->db->get('leaves')->result();
@@ -570,6 +717,19 @@ class Leaves_model extends CI_Model {
                 $enddate = $entry->enddate . 'T18:00:00';
             }
             
+            $imageUrl = '';
+            $allDay = FALSE;
+            $startdatetype =  $entry->startdatetype;
+            $enddatetype = $entry->enddatetype;
+            if ($startdate == $enddate) { //Deal with invalid start/end date
+                $imageUrl = base_url() . 'assets/images/date_error.png';
+                $startdate = $entry->startdate . 'T07:00:00';
+                $enddate = $entry->enddate . 'T18:00:00';
+                $startdatetype = "Morning";
+                $enddatetype = "Afternoon";
+                $allDay = TRUE;
+            }
+            
             switch ($entry->status)
             {
                 case 1: $color = '#999'; break;     // Planned
@@ -581,12 +741,13 @@ class Leaves_model extends CI_Model {
             $jsonevents[] = array(
                 'id' => $entry->id,
                 'title' => $entry->firstname .' ' . $entry->lastname,
+                'imageurl' => $imageUrl,
                 'start' => $startdate,
                 'color' => $color,
-                'allDay' => FALSE,
+                'allDay' => $allDay,
                 'end' => $enddate,
-                'startdatetype' => $entry->startdatetype,
-                'enddatetype' => $entry->enddatetype
+                'startdatetype' => $startdatetype,
+                'enddatetype' => $enddatetype
             );
         }
         return json_encode($jsonevents);
@@ -607,8 +768,7 @@ class Leaves_model extends CI_Model {
         $this->db->join('users', 'users.organization = organization.id');
         $this->db->join('leaves', 'leaves.employee  = users.id');
         $this->db->join('types', 'leaves.type = types.id');
-        $this->db->where('( (leaves.startdate <= DATE(' . $this->db->escape($start) . ') AND leaves.enddate >= DATE(' . $this->db->escape($start) . '))' .
-                                    ' OR (leaves.startdate >= DATE(' . $this->db->escape($start) . ') AND leaves.enddate <= DATE(' . $this->db->escape($end) . ')) )');
+        $this->db->where('(leaves.startdate <= DATE(' . $this->db->escape($end) . ') AND leaves.enddate >= DATE(' . $this->db->escape($start) . '))');
         if ($children === TRUE) {
             $this->load->model('organization_model');
             $list = $this->organization_model->getAllChildren($entity_id);
@@ -642,6 +802,19 @@ class Leaves_model extends CI_Model {
                 $enddate = $entry->enddate . 'T18:00:00';
             }
             
+            $imageUrl = '';
+            $allDay = FALSE;
+            $startdatetype =  $entry->startdatetype;
+            $enddatetype = $entry->enddatetype;
+            if ($startdate == $enddate) { //Deal with invalid start/end date
+                $imageUrl = base_url() . 'assets/images/date_error.png';
+                $startdate = $entry->startdate . 'T07:00:00';
+                $enddate = $entry->enddate . 'T18:00:00';
+                $startdatetype = "Morning";
+                $enddatetype = "Afternoon";
+                $allDay = TRUE;
+            }
+            
             switch ($entry->status)
             {
                 case 1: $color = '#999'; break;     // Planned
@@ -653,12 +826,13 @@ class Leaves_model extends CI_Model {
             $jsonevents[] = array(
                 'id' => $entry->id,
                 'title' => $entry->firstname .' ' . $entry->lastname,
+                'imageurl' => $imageUrl,
                 'start' => $startdate,
                 'color' => $color,
-                'allDay' => FALSE,
+                'allDay' => $allDay,
                 'end' => $enddate,
-                'startdatetype' => $entry->startdatetype,
-                'enddatetype' => $entry->enddatetype
+                'startdatetype' => $startdatetype,
+                'enddatetype' => $enddatetype
             );
         }
         return json_encode($jsonevents);
@@ -706,7 +880,7 @@ class Leaves_model extends CI_Model {
     public function getLeavesRequestedToManager($manager, $all = FALSE) {
         $this->load->model('delegations_model');
         $ids = $this->delegations_model->listManagersGivingDelegation($manager);
-        $this->db->select('leaves.id as id, users.*, leaves.*, types.name as type_label');
+        $this->db->select('leaves.id as leave_id, users.*, leaves.*, types.name as type_label');
         $this->db->select('status.name as status_name, types.name as type_name');
         $this->db->join('status', 'leaves.status = status.id');
         $this->db->join('types', 'leaves.type = types.id');
@@ -724,6 +898,29 @@ class Leaves_model extends CI_Model {
         $this->db->order_by('leaves.startdate', 'desc');
         $query = $this->db->get('leaves');
         return $query->result_array();
+    }
+    
+    /**
+     * Count leave requests submitted to the connected user (or if delegate of a manager)
+     * @param int $manager connected user
+     * @return int number of requests
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function countLeavesRequestedToManager($manager) {
+        $this->load->model('delegations_model');
+        $ids = $this->delegations_model->listManagersGivingDelegation($manager);
+        $this->db->select('count(*) as number', FALSE);
+        $this->db->join('users', 'users.id = leaves.employee');
+        $this->db->where('leaves.status', 2);
+
+        if (count($ids) > 0) {
+            array_push($ids, $manager);
+            $this->db->where_in('users.manager', $ids);
+        } else {
+            $this->db->where('users.manager', $manager);
+        }
+        $result = $this->db->get('leaves');
+        return $result->row()->number;
     }
     
     /**
@@ -780,11 +977,11 @@ class Leaves_model extends CI_Model {
         $children = filter_var($children, FILTER_VALIDATE_BOOLEAN);
         //If no entity was selected, select the entity of the connected user or the root of the organization
         if ($entity == -1) {
-            $this->load->model('users_model');
-            $user = $this->users_model->getUsers($this->session->userdata('id'));
-            if (is_null($user['organization'])) {
+            if (!$this->session->userdata('logged_in')) {
                 $entity = 0;
             } else {
+                $this->load->model('users_model');
+                $user = $this->users_model->getUsers($this->session->userdata('id'));
                 $entity = $user['organization'];
             }
         }
@@ -904,16 +1101,16 @@ class Leaves_model extends CI_Model {
         $this->db->where('leaves.employee = ', $employee_id);
         $this->db->order_by('startdate', 'asc');
         $events = $this->db->get()->result();
-        $limitDate = DateTime::createFromFormat('Y-m-d', $end);
-        $floorDate = DateTime::createFromFormat('Y-m-d', $start);
+        $limitDate = DateTime::createFromFormat('Y-m-d H:i:s', $end . ' 00:00:00');
+        $floorDate = DateTime::createFromFormat('Y-m-d H:i:s', $start . ' 00:00:00');
         
         $this->load->model('dayoffs_model');
         foreach ($events as $entry) {
             
-            $startDate = DateTime::createFromFormat('Y-m-d', $entry->startdate);
+            $startDate = DateTime::createFromFormat('Y-m-d H:i:s', $entry->startdate . ' 00:00:00');
             if ($startDate < $floorDate) $startDate = $floorDate;
             $iDate = clone $startDate;
-            $endDate = DateTime::createFromFormat('Y-m-d', $entry->enddate);
+            $endDate = DateTime::createFromFormat('Y-m-d H:i:s', $entry->enddate . ' 00:00:00');
             if ($endDate > $limitDate) $endDate = $limitDate;
             
             //Iteration between 2 dates
@@ -940,11 +1137,13 @@ class Leaves_model extends CI_Model {
                 //4 - All Day Off       []
                 //5 - Morning Day Off   |\
                 //6 - Afternoon Day Off /|
+                //9 - Error in start/end types
                 
                 //Length of leave request is one day long
                 if ($one_day && $start_morning && $end_afternoon) $display = '1';
                 if ($one_day && $start_morning && $end_morning) $display = '2';
                 if ($one_day && $start_afternoon && $end_afternoon) $display = '3';
+                if ($one_day && $start_afternoon && $end_morning) $display = '9';
                 //Length of leave request is one day long is more than one day
                 //We are in the middle of a long leave request
                 if (!$one_day && !$first_day && !$last_day) $display = '1';

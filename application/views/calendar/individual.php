@@ -61,7 +61,7 @@
         
     </div>
     <div class="modal-footer">
-        <a href="#" onclick="$('#frmEvent').modal('hide');" class="btn secondary"><?php echo lang('calendar_individual_popup_event_button_close');?></a>
+        <a href="#" onclick="$('#frmEvent').modal('hide');" class="btn"><?php echo lang('calendar_individual_popup_event_button_close');?></a>
     </div>
 </div>
 
@@ -160,6 +160,11 @@ $(function () {
             } else {
                 $('#frmModalAjaxWait').modal('hide');
             }    
+        },
+        eventRender: function(event, element, view) {
+            if(event.imageurl){
+                $(element).find('span:first').prepend('<img src="' + event.imageurl + '" />');
+            }
         },
         eventAfterRender: function(event, element, view) {
             //Add tooltip to the element

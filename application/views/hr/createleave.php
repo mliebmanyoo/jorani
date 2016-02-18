@@ -18,7 +18,8 @@
 
 <?php echo validation_errors(); ?>
 
-<?php echo form_open($form_action) ?>
+<?php $attributes = array('id' => 'frmLeaveForm');
+echo form_open($form_action, $attributes) ?>
 
     <label for="type" required><?php echo lang('hr_leaves_create_field_type');?></label>
     <select name="type" id="type">
@@ -59,13 +60,18 @@
         <?php echo lang('hr_leaves_create_field_overlapping_message');?>
     </div>
     
+    <div class="alert hide alert-error" id="lblOverlappingDayOffAlert" onclick="$('#lblOverlappingDayOffAlert').hide();">
+        <button type="button" class="close">&times;</button>
+        <?php echo lang('hr_leaves_flash_msg_overlap_dayoff');?>
+    </div>
+    
     <label for="cause"><?php echo lang('hr_leaves_create_field_cause');?></label>
     <textarea name="cause"><?php echo set_value('cause'); ?></textarea>
     
     <label for="status" required><?php echo lang('hr_leaves_create_field_status');?></label>
     <select name="status">
-        <option value="1" selected><?php echo lang('Planned');?></option>
-        <option value="2"><?php echo lang('Requested');?></option>
+        <option value="1" <?php if ($this->config->item('leave_status_requested') == FALSE) echo 'selected'; ?>><?php echo lang('Planned');?></option>
+        <option value="2" <?php if ($this->config->item('leave_status_requested') == TRUE) echo 'selected'; ?>><?php echo lang('Requested');?></option>
         <option value="3"><?php echo lang('Accepted');?></option>
         <option value="4"><?php echo lang('Rejected');?></option>    
     </select><br />
@@ -77,7 +83,16 @@
 
     </div>
     <div class="span4">
-        <span id="spnDayOff">&nbsp;</span>
+        <div class="row-fluid">
+            <div class="span12">
+                <span id="spnDayType"></span>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <span id="spnDaysOffList"></span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -98,17 +113,46 @@ if ($language_code != 'en') { ?>
 <?php } ?>
 <script type="text/javascript" src="<?php echo base_url();?>assets/js/moment-with-locales.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="<?php echo base_url();?>assets/js/lms/leave.edit.js" type="text/javascript"></script>
+<script src="<?php echo base_url();?>assets/js/bootbox.min.js"></script>
 <script type="text/javascript">
 <?php if ($this->config->item('csrf_protection') == TRUE) {?>
+$(function () {
     $.ajaxSetup({
         data: {
             <?php echo $this->security->get_csrf_token_name();?>: "<?php echo $this->security->get_csrf_hash();?>",
         }
     });
+});
 <?php }?>
     var baseURL = '<?php echo base_url();?>';
     var userId = <?php echo $employee; ?>;
     var leaveId = null;
     var languageCode = '<?php echo $language_code;?>';
     var dateJsFormat = '<?php echo lang('global_date_js_format');?>';
+    var dateMomentJsFormat = '<?php echo lang('global_date_momentjs_format');?>';
+    
+    var noContractMsg = "<?php echo lang('hr_leaves_validate_flash_msg_no_contract');?>";
+    var noTwoPeriodsMsg = "<?php echo lang('hr_leaves_validate_flash_msg_overlap_period');?>";
+    
+    var overlappingWithDayOff = "<?php echo lang('hr_leaves_flash_msg_overlap_dayoff');?>";
+    var listOfDaysOffTitle = "<?php echo lang('hr_leaves_flash_spn_list_days_off');?>";
+    
+function validate_form() {
+    var fieldname = "";
+    
+    //Call custom trigger defined into local/triggers/leave.js
+    if (typeof triggerValidateCreateForm == 'function') { 
+       if (triggerValidateCreateForm() == false) return false;
+    }
+    
+    if ($('#viz_startdate').val() == "") fieldname = "<?php echo lang('hr_leaves_create_field_start');?>";
+    if ($('#viz_enddate').val() == "") fieldname = "<?php echo lang('hr_leaves_create_field_end');?>";
+    if ($('#duration').val() == "" || $('#duration').val() == 0) fieldname = "<?php echo lang('hr_leaves_create_field_duration');?>";
+    if (fieldname == "") {
+        return true;
+    } else {
+        bootbox.alert(<?php echo lang('hr_leaves_validate_mandatory_js_msg');?>);
+        return false;
+    }
+}
 </script>

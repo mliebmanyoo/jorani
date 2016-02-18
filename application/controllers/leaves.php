@@ -58,6 +58,7 @@ class Leaves extends CI_Controller {
     public function counters($refTmp = NULL) {
         $this->auth->checkIfOperationIsAllowed('counters_leaves');
         $data = getUserContext($this);
+        $this->lang->load('datatable', $this->language);
         $refDate = date("Y-m-d");
         if ($refTmp != NULL) {
             $refDate = date("Y-m-d", $refTmp);
@@ -458,8 +459,8 @@ class Leaves extends CI_Controller {
         $type = $this->input->post('type', TRUE);
         $startdate = $this->input->post('startdate', TRUE);
         $enddate = $this->input->post('enddate', TRUE);
-        $startdatetype = $this->input->post('startdatetype', TRUE);
-        $enddatetype = $this->input->post('enddatetype', TRUE);
+        $startdatetype = $this->input->post('startdatetype', TRUE);     //Mandatory field checked by frontend
+        $enddatetype = $this->input->post('enddatetype', TRUE);       //Mandatory field checked by frontend
         $leave_id = $this->input->post('leave_id', TRUE);
         $leaveValidator = new stdClass;
         if (isset($id) && isset($type)) {
@@ -470,23 +471,41 @@ class Leaves extends CI_Controller {
             }
         }
         if (isset($id) && isset($startdate) && isset($enddate)) {
-            if (isset($startdatetype) && isset($enddatetype)) {
-                $leaveValidator->length = $this->leaves_model->length($id, $startdate, $enddate, $startdatetype, $enddatetype);
-                if (isset($leave_id)) {
-                    $leaveValidator->overlap = $this->leaves_model->detectOverlappingLeaves($id, $startdate, $enddate, $startdatetype, $enddatetype, $leave_id);
-                } else {
-                    $leaveValidator->overlap = $this->leaves_model->detectOverlappingLeaves($id, $startdate, $enddate, $startdatetype, $enddatetype);
-                }
+            if (isset($leave_id)) {
+                $leaveValidator->overlap = $this->leaves_model->detectOverlappingLeaves($id, $startdate, $enddate, $startdatetype, $enddatetype, $leave_id);
+            } else {
+                $leaveValidator->overlap = $this->leaves_model->detectOverlappingLeaves($id, $startdate, $enddate, $startdatetype, $enddatetype);
             }
         }
+        
         //Returns end date of the yearly leave period or NULL if the user is not linked to a contract
         $this->load->model('contracts_model');
         $startentdate = NULL;
         $endentdate = NULL;
         $hasContract = $this->contracts_model->getBoundaries($id, $startentdate, $endentdate);
-        $leaveValidator->startentdate = $startentdate;
-        $leaveValidator->endentdate = $endentdate;
+        $leaveValidator->PeriodStartDate = $startentdate;
+        $leaveValidator->PeriodEndDate = $endentdate;
         $leaveValidator->hasContract = $hasContract;
+        
+        //Add non working days between the two dates (including their type: morning, afternoon and all day)
+        if (isset($id) && ($startdate!='') && ($enddate!='')  && $hasContract===TRUE) {
+            $this->load->model('dayoffs_model');
+            $leaveValidator->listDaysOff = $this->dayoffs_model->listOfDaysOffBetweenDates($id, $startdate, $enddate);
+            //Sum non-working days and overlapping with day off detection
+            $result = $this->leaves_model->actualLengthAndDaysOff($id, $startdate, $enddate, $startdatetype, $enddatetype, $leaveValidator->listDaysOff);
+            $leaveValidator->overlapDayOff = $result['overlapping'];
+            $leaveValidator->lengthDaysOff = $result['daysoff'];
+            $leaveValidator->length = $result['length'];
+        }
+        //If the user has no contract, simply compute a date difference between start and end dates
+        if (isset($id) && isset($startdate) && isset($enddate)  && $hasContract===FALSE) {
+            $leaveValidator->length = $this->leaves_model->length($id, $startdate, $enddate, $startdatetype, $enddatetype);
+        }
+        
+        //Repeat start and end dates of the leave request
+        $leaveValidator->RequestStartDate = $startdate;
+        $leaveValidator->RequestEndDate = $enddate;
+        
         echo json_encode($leaveValidator);
     }
 }

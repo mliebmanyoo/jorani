@@ -31,6 +31,7 @@ $lang['requests_collaborators_thead_link_create_leave'] = 'បង្កើតក
 $lang['requests_collaborators_thead_firstname'] = 'នាមត្រកូលអ្នកប្រើប្រាស់';
 $lang['requests_collaborators_thead_lastname'] = 'ឈ្មោះអ្នកប្រើប្រាស់';
 $lang['requests_collaborators_thead_email'] = 'ម៉ែល';
+$lang['requests_collaborators_thead_identifier'] = 'ឯកសារកំណត់អត្តសញ្ញាណ';
 
 $lang['requests_summary_title'] = 'សមតុល្យនៃថ្ងៃឈប់សម្រាកសម្រាប់អ្នកប្រើប្រាស់ #';
 $lang['requests_summary_thead_type'] = 'បែបផែននៃការចាកចេញ';
@@ -74,3 +75,7 @@ $lang['requests_delegations_popup_delegate_button_cancel'] = 'បោះបង់
 $lang['requests_delegations_confirm_delete_message'] = 'តើអ្នកប្រាកដមែនទេថាអ្នកនឹងលុបចោលនូវការផ្ទេរសិទ្ធនេះ?';
 $lang['requests_delegations_confirm_delete_cancel'] = 'បោះបង់';
 $lang['requests_delegations_confirm_delete_yes'] = 'យល់ព្រម';
+
+$lang['requests_balance_title'] = 'Leave balance (subordinates)';
+$lang['requests_balance_description'] = 'Leave balance of my direct report subordinates. If you are not a manager, this list will always be empty.';
+$lang['requests_balance_date_field'] = 'Date of report';

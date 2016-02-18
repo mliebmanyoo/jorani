@@ -8,6 +8,8 @@
  */
 
 $lang['leavetypes_type_title'] = 'Types d\'absence';
+$lang['leavetypes_type_description'] = 'Le type d\'absence n°0 est réservé pour la gestion des heures supplémentaires. Vous ne devriez pas l\'utiliser pour les autres types de demande.';
+$lang['leavetypes_type_confirm_rename'] = 'Le type d\'absence n°0 est réservé pour la gestion des heures supplémentaires. Êtes-vous sûr de vouloir le renommer ?';
 $lang['leavetypes_type_thead_id'] = 'N°';
 $lang['leavetypes_type_thead_name'] = 'Nom';
 $lang['leavetypes_type_thead_tip_delete'] = 'supprimer';
@@ -15,6 +17,8 @@ $lang['leavetypes_type_thead_tip_edit'] = 'modifier';
 $lang['leavetypes_type_button_export'] = 'Exporter cette liste';
 $lang['leavetypes_type_button_create'] = 'Créer un type';
 $lang['leavetypes_type_not_found'] = 'Aucun type d\'absence n\'a été trouvé dans la base de données.';
+
+$lang['leavetypes_js_unique_error_msg'] = 'Ce type d\'absence existe déjà.';
 
 $lang['leavetypes_popup_create_title'] = 'Ajouter un type d\'absence';
 $lang['leavetypes_popup_create_button_cancel'] = 'Annuler';

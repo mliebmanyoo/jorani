@@ -36,6 +36,32 @@ $this->lang->load('menu', $language);?>
 </script>
 <?php } ?>
 
+<?php if ($this->config->item('enable_mobile') != FALSE) { ?>
+<div id="frmGenerateQRCode" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+         <h3>QR Code</h3>
+    </div>
+    <div class="modal-body" id="frmGenerateQRCodeBody">
+        <img src="<?php echo base_url();?>assets/images/loading.gif">
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal"><?php echo lang('OK');?></button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        //Popup generate a QR Code for mobile access
+        $("#cmdGenerateQRCode").click(function() {
+            $("#frmGenerateQRCode").modal('show');
+            $("#frmGenerateQRCodeBody").load('<?php echo base_url();?>admin/qrcode');
+        });
+        
+    });
+</script>
+<?php } ?>
+
 <div id="wrap">
 <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
@@ -67,7 +93,6 @@ $this->lang->load('menu', $language);?>
                     <li class="nav-header"><?php echo lang('menu_hr_employees_divider');?></li>
                     <li><a href="<?php echo base_url();?>hr/employees"><?php echo lang('menu_hr_list_employees');?></a></li>
                     <li><a href="<?php echo base_url();?>organization"><?php echo lang('menu_hr_list_organization');?></a></li>
-                    <!--<li><a href="<?php echo base_url();?>entitleddays/organization"><?php echo lang('menu_hr_list_entitlements');?></a></li>//-->
                     <li class="divider"></li>
                     <li class="nav-header"><?php echo lang('menu_hr_contracts_divider');?></li>
                     <li><a href="<?php echo base_url();?>contracts"><?php echo lang('menu_hr_list_contracts');?></a></li>
@@ -83,13 +108,30 @@ $this->lang->load('menu', $language);?>
 
              <?php if ($is_manager == TRUE) { ?>
                 <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo lang('menu_validation_title');?> <b class="caret"></b></a>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      <?php echo lang('menu_validation_title');?>&nbsp;
+                      <?php if ($requests_count > 0) { ?>
+                      <span class="badge badge-warning"><?php echo $requests_count;?></span>
+                      <?php } ?>
+                      &nbsp;<b class="caret"></b>
+                  </a>
                   <ul class="dropdown-menu">
                     <li><a href="<?php echo base_url();?>requests/delegations"><?php echo lang('menu_validation_delegations');?></a></li>
                     <li><a href="<?php echo base_url();?>requests/collaborators"><?php echo lang('menu_validation_collaborators');?></a></li>
-                    <li><a href="<?php echo base_url();?>requests"><?php echo lang('menu_validation_leaves');?></a></li>
+                    <li><a href="<?php echo base_url();?>requests/balance"><?php echo lang('menu_hr_report_leave_balance');?></a></li>
+                    <li class="divider"></li>
+                    <li class="nav-header"><?php echo lang('menu_validation_title');?></li>
+                    <li><a href="<?php echo base_url();?>requests">
+                      <?php if ($requested_leaves_count > 0) { ?>
+                      <span class="badge badge-info"><?php echo $requested_leaves_count;?></span>
+                      <?php } ?>
+                        <?php echo lang('menu_validation_leaves');?></a></li>
                     <?php if ($this->config->item('disable_overtime') == FALSE) { ?>
-                    <li><a href="<?php echo base_url();?>overtime"><?php echo lang('menu_validation_overtime');?></a></li>
+                    <li><a href="<?php echo base_url();?>overtime">
+                      <?php if ($requested_extra_count > 0) { ?>
+                      <span class="badge badge-info"><?php echo $requested_extra_count;?></span>
+                      <?php } ?>
+                        <?php echo lang('menu_validation_overtime');?></a></li>
                     <?php } ?>
                   </ul>
                 </li>
@@ -130,6 +172,9 @@ $this->lang->load('menu', $language);?>
                 <ul class="nav pull-right">
                     <a href="<?php echo base_url();?>users/myprofile" class="brand"><?php echo $fullname;?></a>
                     <li><a href="<?php echo base_url();?>users/myprofile" title="<?php echo lang('menu_banner_tip_myprofile');?>"><i class="icon-user icon-white"></i></a></li>
+                    <?php if ($this->config->item('enable_mobile') != FALSE) { ?>
+                    <li><a href="#" id="cmdGenerateQRCode" title="QR Code"><i class="fa fa-mobile"></i></a></li>
+                    <?php } ?>
                     <?php if ($this->config->item('ldap_enabled') == FALSE) { ?>
                     <li><a href="#" id="cmdChangePassword" title="<?php echo lang('menu_banner_tip_reset');?>"><i class="icon-lock icon-white"></i></a></li>
                     <?php } ?>
@@ -141,7 +186,5 @@ $this->lang->load('menu', $language);?>
 
     <div class="container-fluid">
         <div class="row-fluid"><div class="span12">
-
-
                 <div class="row-fluid"><div class="span12">&nbsp;</div></div>
                 <div class="row-fluid"><div class="span12">&nbsp;</div></div>

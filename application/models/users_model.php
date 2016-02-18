@@ -55,6 +55,7 @@ class Users_model extends CI_Model {
      * Get the name of a given user
      * @param int $id Identifier of employee
      * @return string firstname and lastname of the employee
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
     public function getName($id) {
         $record = $this->getUsers($id);
@@ -70,7 +71,12 @@ class Users_model extends CI_Model {
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
     public function getCollaboratorsOfManager($id = 0) {
+        $this->db->select('users.*');
+        $this->db->select('organization.name as department_name, positions.name as position_name, contracts.name as contract_name');
         $this->db->from('users');
+        $this->db->join('organization', 'users.organization = organization.id');
+        $this->db->join('positions', 'positions.id  = users.position', 'left');
+        $this->db->join('contracts', 'contracts.id  = users.contract', 'left');
         $this->db->order_by("lastname", "asc");
         $this->db->order_by("firstname", "asc");
         $this->db->where('manager', $id);
@@ -139,13 +145,18 @@ class Users_model extends CI_Model {
      */
     public function setUsers() {
         //Decipher the password value (RSA encoded -> base64 -> decode -> decrypt)
-        require_once(APPPATH . 'third_party/phpseclib/vendor/autoload.php');
-        $rsa = new phpseclib\Crypt\RSA();
-        $private_key = file_get_contents('./assets/keys/private.pem', TRUE);
-        $rsa->setEncryptionMode(phpseclib\Crypt\RSA::ENCRYPTION_PKCS1);
-        $rsa->loadKey($private_key, phpseclib\Crypt\RSA::PRIVATE_FORMAT_PKCS1);
-        $password = $rsa->decrypt(base64_decode($this->input->post('CipheredValue')));
-        
+        $password = '';
+        if (function_exists('openssl_pkey_get_private')) {
+            $privateKey = openssl_pkey_get_private(file_get_contents('./assets/keys/private.pem', TRUE));
+            openssl_private_decrypt(base64_decode($this->input->post('CipheredValue')), $password, $privateKey);
+        } else {
+            require_once(APPPATH . 'third_party/phpseclib/vendor/autoload.php');
+            $rsa = new phpseclib\Crypt\RSA();
+            $private_key = file_get_contents('./assets/keys/private.pem', TRUE);
+            $rsa->setEncryptionMode(phpseclib\Crypt\RSA::ENCRYPTION_PKCS1);
+            $rsa->loadKey($private_key, phpseclib\Crypt\RSA::PRIVATE_FORMAT_PKCS1);
+            $password = $rsa->decrypt(base64_decode($this->input->post('CipheredValue')));
+        }
         //Hash the clear password using bcrypt (8 iterations)
         $salt = '$2a$08$' . substr(strtr(base64_encode($this->getRandomBytes(16)), '+', '.'), 0, 22) . '$';
         $hash = crypt($password, $salt);
@@ -330,13 +341,18 @@ class Users_model extends CI_Model {
      */
     public function resetPassword($id, $CipheredNewPassword) {
         //Decipher the password value (RSA encoded -> base64 -> decode -> decrypt)
-        require_once(APPPATH . 'third_party/phpseclib/vendor/autoload.php');
-        $rsa = new phpseclib\Crypt\RSA();
-        $private_key = file_get_contents('./assets/keys/private.pem', TRUE);
-        $rsa->setEncryptionMode(phpseclib\Crypt\RSA::ENCRYPTION_PKCS1);
-        $rsa->loadKey($private_key, phpseclib\Crypt\RSA::PRIVATE_FORMAT_PKCS1);
-        $password = $rsa->decrypt(base64_decode($CipheredNewPassword));
-        
+        $password = '';
+        if (function_exists('openssl_pkey_get_private')) {
+            $privateKey = openssl_pkey_get_private(file_get_contents('./assets/keys/private.pem', TRUE));
+            openssl_private_decrypt(base64_decode($this->input->post('CipheredValue')), $password, $privateKey);
+        } else {
+            require_once(APPPATH . 'third_party/phpseclib/vendor/autoload.php');
+            $rsa = new phpseclib\Crypt\RSA();
+            $private_key = file_get_contents('./assets/keys/private.pem', TRUE);
+            $rsa->setEncryptionMode(phpseclib\Crypt\RSA::ENCRYPTION_PKCS1);
+            $rsa->loadKey($private_key, phpseclib\Crypt\RSA::PRIVATE_FORMAT_PKCS1);
+            $password = $rsa->decrypt(base64_decode($CipheredNewPassword));
+        }
         //Hash the clear password using bcrypt (8 iterations)
         $salt = '$2a$08$' . substr(strtr(base64_encode($this->getRandomBytes(16)), '+', '.'), 0, 22) . '$';
         $hash = crypt($password, $salt);
@@ -482,17 +498,25 @@ class Users_model extends CI_Model {
      * Check the provided credentials and load user's profile if they are correct
      * Mostly used for alternative signin mechanisms such as SSO
      * @param string $email E-mail address of the user
+     * @param string $password Optional password
      * @return bool TRUE if user was found into the database, FALSE otherwise
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
-    public function checkCredentialsEmail($email) {
+    public function checkCredentialsEmail($email, $password = NULL) {
         $this->db->from('users');
         $this->db->where('email', $email);
         $this->db->where('active = TRUE');
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             $row = $query->row();
-            $this->loadProfile($row);
+            if (!is_null($password)) {
+                $hash = crypt($password, $row->password);
+                if ($hash == $row->password) {
+                    $this->loadProfile($row);
+                }
+            } else {
+                $this->loadProfile($row);
+            }
             return TRUE;
         } else {
             return FALSE;
@@ -522,19 +546,29 @@ class Users_model extends CI_Model {
      * Get the list of employees or one employee
      * @param int $id optional id of the entity, all entities if 0
      * @param bool $children TRUE : include sub entities, FALSE otherwise
+     * @param string $filterActive "all"; "active" (only), or "inactive" (only)
+     * @param string $criterion1 "lesser" or "greater" (optional)
+     * @param string $date1 Date Hired (optional)
+     * @param string $criterion2 "lesser" or "greater" (optional)
+     * @param string $date2 Date Hired (optional)
      * @return array record of users
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
-    public function employeesOfEntity($id = 0, $children = TRUE) {
+    public function employeesOfEntity($id = 0, $children = TRUE, $filterActive = "all",
+            $criterion1 = NULL, $date1 = NULL, $criterion2 = NULL, $date2 = NULL) {
         $this->db->select('users.id as id,'
                 . ' users.firstname as firstname,'
                 . ' users.lastname as lastname,'
                 . ' users.email as email,'
+                . ' users.identifier as identifier,'
+                . ' users.datehired as datehired,'
+                . ' positions.name as position,'
                 . ' organization.name as entity,'
                 . ' contracts.name as contract,'
                 . ' CONCAT_WS(\' \',managers.firstname,  managers.lastname) as manager_name', FALSE);
         $this->db->from('users');
         $this->db->join('contracts', 'contracts.id = users.contract', 'left outer');
+        $this->db->join('positions', 'positions.id = users.position', 'left outer');
         $this->db->join('users as managers', 'managers.id = users.manager', 'left outer');
         $this->db->join('organization', 'organization.id = users.organization', 'left outer');
 
@@ -552,7 +586,24 @@ class Users_model extends CI_Model {
         } else {
             $this->db->where('users.organization', $id);
         }
-
+        
+        //Triple value for active filter ("all" = no where criteria)
+        if ($filterActive == "active") {
+            $this->db->where('users.active', TRUE);
+        }
+        if ($filterActive == "inactive") {
+            $this->db->where('users.active', FALSE);
+        }
+        
+        if (!is_null($criterion1) && !is_null($date1) && $date1!="empty" && $date1!="undefined") {
+            $criterion1 = ($criterion1 == "greater"?">":"<");
+            $this->db->where("users.datehired " . $criterion1 . " STR_TO_DATE('" . $date1 . "', '%Y-%m-%d')");
+        }
+        if (!is_null($criterion2) && !is_null($date2) && $date2!="empty" && $date2!="undefined") {
+            $criterion2 = ($criterion2 == "greater"?">":"<");
+            $this->db->where("users.datehired " . $criterion2 . " STR_TO_DATE('" . $date2 . "', '%Y-%m-%d')");
+        }
+        
         return $this->db->get()->result();
     }
     
@@ -583,9 +634,28 @@ class Users_model extends CI_Model {
     }
     
     /**
+     * Check if a user is active (TRUE) or inactive (FALSE)
+     * @param string $login login of a user
+     * @return bool active (TRUE) or inactive (FALSE)
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function isActive($login) {
+        $this->db->from('users');
+        $this->db->where('login', $login);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            $row = $query->row();
+            return $row->active;
+        } else {
+            return FALSE;
+        }
+    }
+    
+    /**
      * Try to return the user information from the login field
      * @param string $login Login
      * @return User data row or null if no user was found
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
     public function getUserByLogin($login) {
         $this->db->from('users');
@@ -603,6 +673,7 @@ class Users_model extends CI_Model {
      * Generate some random bytes by using openssl, dev/urandom or random
      * @param int $count length of the random string
      * @return string a string of pseudo-random bytes (must be encoded)
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
     protected function getRandomBytes($length) {
         if(function_exists('openssl_random_pseudo_bytes')) {
@@ -627,5 +698,53 @@ class Users_model extends CI_Model {
           $rnd .= chr(hexdec($sha[$char].$sha[$char+1]));
         }
         return $rnd;
+    }
+    
+    /**
+     * Update the manager of a list of employees
+     * @param int $managerId DB Identifier of the manager
+     * @param array $usersList List of DB ID of the affected employees
+     * @return int number of affected rows
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function updateManagerForUserList($managerId, $usersList) {
+        $data = array(
+            'manager' => $managerId
+        );
+        $this->db->where_in('id', $usersList);
+        $result = $this->db->update('users', $data);
+        return $result;
+    }
+    
+    /**
+     * Update the entity of a list of employees
+     * @param int $entityId DB Identifier of the entity
+     * @param array $usersList List of DB ID of the affected employees
+     * @return int number of affected rows
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function updateEntityForUserList($entityId, $usersList) {
+        $data = array(
+            'organization' => $entityId
+        );
+        $this->db->where_in('id', $usersList);
+        $result = $this->db->update('users', $data);
+        return $result;
+    }
+    
+    /**
+     * Update the contract of a list of employees
+     * @param int $contractId DB Identifier of the contract
+     * @param array $usersList List of DB ID of the affected employees
+     * @return int number of affected rows
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function updateContractForUserList($contractId, $usersList) {
+        $data = array(
+            'contract' => $contractId
+        );
+        $this->db->where_in('id', $usersList);
+        $result = $this->db->update('users', $data);
+        return $result;
     }
 }

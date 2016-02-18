@@ -74,7 +74,7 @@
     <div class="span12">&nbsp;</div>
 </div>
 
-<link href="<?php echo base_url();?>assets/datatable/css/jquery.dataTables.css" rel="stylesheet">
+<link href="<?php echo base_url();?>assets/datatable/css/jquery.dataTables.min.css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo base_url();?>assets/datatable/js/jquery.dataTables.min.js"></script>
 
 <div id="frmDeleteLeaveRequest" class="modal hide fade">
@@ -87,8 +87,8 @@
         <p><?php echo lang('hr_leaves_popup_delete_question');?></p>
     </div>
     <div class="modal-footer">
-        <a href="#" id="lnkDeleteUser" class="btn danger"><?php echo lang('hr_leaves_popup_delete_button_yes');?></a>
-        <a href="#" onclick="$('#frmDeleteLeaveRequest').modal('hide');" class="btn secondary"><?php echo lang('hr_leaves_popup_delete_button_no');?></a>
+        <a href="#" id="lnkDeleteUser" class="btn btn-danger"><?php echo lang('hr_leaves_popup_delete_button_yes');?></a>
+        <a href="#" onclick="$('#frmDeleteLeaveRequest').modal('hide');" class="btn"><?php echo lang('hr_leaves_popup_delete_button_no');?></a>
     </div>
 </div>
 

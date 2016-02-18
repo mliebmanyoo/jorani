@@ -36,8 +36,14 @@ class Hr extends CI_Controller {
         $this->auth->checkIfOperationIsAllowed('list_employees');
         $data = getUserContext($this);
         $this->lang->load('datatable', $this->language);
+        $this->lang->load('entitleddays', $this->language);
+        $this->lang->load('leaves', $this->language);
         $data['title'] = lang('hr_employees_title');
         $data['help'] = $this->help->create_help_link('global_link_doc_page_list_employees');
+        $this->load->model('contracts_model');
+        $data['contracts'] = $this->contracts_model->getContracts();
+        $this->load->model('types_model');
+        $data['types'] = $this->types_model->getTypes();
         $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
@@ -50,32 +56,159 @@ class Hr extends CI_Controller {
      * Prints the table content in a JSON format expected by jQuery Datatable
      * @param int $id optional id of the entity, all entities if 0
      * @param bool $children TRUE : include sub entities, FALSE otherwise
+     * @param string $filterActive "all"; "active" (only), or "inactive" (only)
+     * @param string $criterion1 "lesser" or "greater" (optional)
+     * @param string $date1 Date Hired (optional)
+     * @param string $criterion2 "lesser" or "greater" (optional)
+     * @param string $date2 Date Hired (optional)
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
-    public function employeesOfEntity($id = 0, $children = TRUE) {
+    public function employeesOfEntity($id = 0, $children = TRUE, $filterActive = "all",
+            $criterion1 = NULL, $date1 = NULL, $criterion2 = NULL, $date2 = NULL) {
         header("Content-Type: application/json");
         if ($this->auth->isAllowed('list_employees') == FALSE) {
             $this->output->set_header("HTTP/1.1 403 Forbidden");
         } else {
             $children = filter_var($children, FILTER_VALIDATE_BOOLEAN);
             $this->load->model('users_model');
-            $employees = $this->users_model->employeesOfEntity($id, $children);
-            $msg = '{"iTotalRecords":' . count($employees);
-            $msg .= ',"iTotalDisplayRecords":' . count($employees);
-            $msg .= ',"aaData":[';
+            $employees = $this->users_model->employeesOfEntity($id, $children, $filterActive,
+                    $criterion1, $date1, $criterion2, $date2);
+            $msg = '{"draw": 1,';
+            $msg .= '"recordsTotal":' . count($employees);
+            $msg .= ',"recordsFiltered":' . count($employees);
+            $msg .= ',"data":[';
             foreach ($employees as $employee) {
-                $msg .= '["' . $employee->id . '",';
-                $msg .= '"' . $employee->firstname . '",';
-                $msg .= '"' . $employee->lastname . '",';
-                $msg .= '"' . $employee->email . '",';
-                $msg .= '"' . $employee->entity . '",';
-                $msg .= '"' . $employee->contract . '",';
-                $msg .= '"' . $employee->manager_name . '"';
-                $msg .= '],';
+                $date = new DateTime($employee->datehired);
+                $tmpDate = $date->getTimestamp();
+                $displayDate = $date->format(lang('global_date_format'));
+                
+                $msg .= '{"DT_RowId":"' . $employee->id . '",';
+                $msg .= '"id":"' . $employee->id . '",';
+                $msg .= '"firstname":"' . $employee->firstname . '",';
+                $msg .= '"lastname":"' . $employee->lastname . '",';
+                $msg .= '"email":"' . $employee->email . '",';
+                $msg .= '"entity":"' . $employee->entity . '",';
+                $msg .= '"identifier":"' . $employee->identifier . '",';
+                $msg .= '"contract":"' . $employee->contract . '",';
+                $msg .= '"datehired": {';
+                $msg .=     '"display":"' . $displayDate . '",';
+                $msg .=     '"timestamp":' . $tmpDate;
+                $msg .= '},';
+                $msg .= '"position":"' . $employee->position . '",';
+                $msg .= '"manager_name":"' . $employee->manager_name . '"';
+                $msg .= '},';
             }
             $msg = rtrim($msg, ",");
             $msg .= ']}';
             echo $msg;
+        }
+    }
+    
+    /**
+     * Ajax endpoint: edit the manager for a list of employees
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function editManager() {
+        header("Content-Type: application/json");
+        if ($this->auth->isAllowed('list_employees') == FALSE) {
+            $this->output->set_header("HTTP/1.1 403 Forbidden");
+        } else {
+            $managerId = $this->input->post('manager', TRUE);
+            $employees = $this->input->post('employees', TRUE);
+            $objectEmployees = json_decode($employees);
+            $this->load->model('users_model');
+            $result = $this->users_model->updateManagerForUserList($managerId, $objectEmployees);
+            echo $result;
+        }
+    }
+    
+    /**
+     * Ajax endpoint: edit the entity for a list of employees
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function editEntity() {
+        header("Content-Type: application/json");
+        if ($this->auth->isAllowed('list_employees') == FALSE) {
+            $this->output->set_header("HTTP/1.1 403 Forbidden");
+        } else {
+            $entityId = $this->input->post('entity', TRUE);
+            $employees = $this->input->post('employees', TRUE);
+            $objectEmployees = json_decode($employees);
+            $this->load->model('users_model');
+            $result = $this->users_model->updateEntityForUserList($entityId, $objectEmployees);
+            echo $result;
+        }
+    }
+    
+    /**
+     * Ajax endpoint: edit the contract for a list of employees
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function editContract() {
+        header("Content-Type: application/json");
+        if ($this->auth->isAllowed('list_employees') == FALSE) {
+            $this->output->set_header("HTTP/1.1 403 Forbidden");
+        } else {
+            $contractId = $this->input->post('contract', TRUE);
+            $employees = $this->input->post('employees', TRUE);
+            $objectEmployees = json_decode($employees);
+            $this->load->model('users_model');
+            $result = $this->users_model->updateContractForUserList($contractId, $objectEmployees);
+            echo $result;
+        }
+    }
+    
+    /**
+     * Ajax endpoint: create a leave request for a list of employees
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function createLeaveRequest() {
+        header("Content-Type: application/json");
+        if ($this->auth->isAllowed('list_employees') == FALSE) {
+            $this->output->set_header("HTTP/1.1 403 Forbidden");
+        } else {
+            $type = $this->input->post('type', TRUE);
+            $duration = $this->input->post('duration', TRUE);
+            $startdate = $this->input->post('startdate', TRUE);
+            $enddate = $this->input->post('enddate', TRUE);
+            $startdatetype = $this->input->post('startdatetype', TRUE);
+            $enddatetype = $this->input->post('enddatetype', TRUE);
+            $cause = $this->input->post('cause', TRUE);
+            $status = $this->input->post('status', TRUE);
+            $employees = $this->input->post('employees', TRUE);
+            $objectEmployees = json_decode($employees);
+            $this->load->model('leaves_model');
+            $result = $this->leaves_model->createRequestForUserList($type, $duration,
+                    $startdate, $enddate, $startdatetype, $enddatetype, $cause, $status,
+                    $objectEmployees);
+            echo $result;
+        }
+    }
+    
+    /**
+     * Ajax endpoint : insert into the list of entitled days for a list of employees
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function editEntitlements() {
+        if ($this->auth->isAllowed('entitleddays_user') == FALSE) {
+            $this->output->set_header("HTTP/1.1 403 Forbidden");
+        } else {
+            $employees = $this->input->post('employees', TRUE);
+            $startdate = $this->input->post('startdate', TRUE);
+            $enddate = $this->input->post('enddate', TRUE);
+            $days = $this->input->post('days', TRUE);
+            $type = $this->input->post('type', TRUE);
+            $description = sanitize($this->input->post('description', TRUE));
+            if (isset($startdate) && isset($enddate) && isset($days) && isset($type) && isset($employees)) {
+                $this->load->model('entitleddays_model');
+                $objectEmployees = json_decode($employees);
+                foreach ($objectEmployees->employeeIds as $user_id) {
+                    $id = $this->entitleddays_model->addEntitledDaysToEmployee((int) $user_id, $startdate, $enddate, $days, $type, $description);
+                    echo $id . ',';
+                }
+            } else {
+                $this->output->set_header("HTTP/1.1 422 Unprocessable entity");
+            }
         }
     }
 
@@ -207,11 +340,13 @@ class Hr extends CI_Controller {
         $this->form_validation->set_rules('status', lang('hr_leaves_create_field_status'), 'required|xss_clean|strip_tags');
 
         $data['credit'] = 0;
+        $default_type = $this->config->item('default_leave_type');
+        $default_type = $default_type == FALSE ? 0 : $default_type;
         if ($this->form_validation->run() === FALSE) {
             $this->load->model('types_model');
             $data['types'] = $this->types_model->getTypes();
             foreach ($data['types'] as $type) {
-                if ($type['id'] == 0) {
+                if ($type['id'] == $default_type) {
                     $data['credit'] = $this->leaves_model->getLeavesTypeBalanceForEmployee($id, $type['name']);
                     break;
                 }
@@ -341,13 +476,24 @@ class Hr extends CI_Controller {
      * Export the list of all employees into an Excel file
      * @param int $id optional id of the entity, all entities if 0
      * @param bool $children TRUE : include sub entities, FALSE otherwise
+     * @param string $filterActive "all"; "active" (only), or "inactive" (only)
+     * @param string $criterion1 "lesser" or "greater" (optional)
+     * @param string $date1 Date Hired (optional)
+     * @param string $criterion2 "lesser" or "greater" (optional)
+     * @param string $date2 Date Hired (optional)
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
-    public function exportEmployees($id = 0, $children = TRUE) {
+    public function exportEmployees($id = 0, $children = TRUE, $filterActive = "all",
+                            $criterion1 = NULL, $date1 = NULL, $criterion2 = NULL, $date2 = NULL) {
         $this->load->model('users_model');
         $this->load->library('excel');
         $data['id'] = $id;
         $data['children'] = filter_var($children, FILTER_VALIDATE_BOOLEAN);
+        $data['filterActive'] = $filterActive;
+        $data['criterion1'] = $criterion1;
+        $data['date1'] = $date1;
+        $data['criterion2'] = $criterion2;
+        $data['date2'] = $date2;
         $this->load->view('hr/export_employees', $data);
     }
     

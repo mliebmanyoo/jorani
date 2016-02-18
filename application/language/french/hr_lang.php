@@ -24,6 +24,9 @@ $lang['hr_employees_thead_email'] = 'E-mail';
 $lang['hr_employees_thead_entity'] = 'Entité';
 $lang['hr_employees_thead_contract'] = 'Contrat';
 $lang['hr_employees_thead_manager'] = 'Manager';
+$lang['hr_employees_thead_identifier'] = 'Identifiant';
+$lang['hr_employees_thead_datehired'] = 'Date d\'embauche';
+$lang['hr_employees_thead_position'] = 'Position';
 $lang['hr_employees_button_create_user'] = 'Créer';
 $lang['hr_employees_button_export'] = 'Exporter cette liste';
 $lang['hr_employees_popup_entitlment_title'] = 'Crédit congés';
@@ -36,6 +39,22 @@ $lang['hr_employees_popup_entity_button_ok'] = 'OK';
 $lang['hr_employees_popup_entity_button_cancel'] = 'Annuler';
 $lang['hr_employees_description'] = 'Clic droit / taphold sur un employé pour les actions contextuelles.';
 $lang['hr_employees_field_subdepts'] = 'Inclure les sous-départments';
+
+$lang['hr_employees_button_all'] = 'Tous';
+$lang['hr_employees_button_active'] = 'Actifs';
+$lang['hr_employees_button_inactive'] = 'Inactifs';
+$lang['hr_employees_button_selection'] = 'Sélection';
+$lang['hr_employees_button_select_all'] = 'Tout sélectionner';
+$lang['hr_employees_button_deselect_all'] = 'Tout désélectionner';
+$lang['hr_employees_button_select_manager'] = 'Sélectionner le Manager';
+$lang['hr_employees_button_select_contract'] = 'Sélectionner le Contract';
+$lang['hr_employees_button_select_entity'] = 'Sélectionner l\'entité';
+$lang['hr_employees_popup_contract_title'] = 'Sélectionner le contract';
+$lang['hr_employees_button_entitleddays'] = 'Crédits congés';
+$lang['hr_employees_button_create_request'] = 'Créer une nouvelle demande';
+
+$lang['hr_employees_popup_manager_title'] = 'Sélectionnez le manager';
+$lang['hr_employees_multiple_edit_selection_msg'] = 'Vous devez sélectionner au moins une ligne dans la table';
 
 $lang['hr_export_employees_title'] = 'Liste des employés';
 $lang['hr_export_employees_thead_id'] = 'N°';
@@ -59,6 +78,11 @@ $lang['hr_leaves_create_button_create'] = 'Créer la demande';
 $lang['hr_leaves_create_button_cancel'] = 'Annuler';
 $lang['hr_leaves_create_flash_msg_success'] = 'La demande d\'absence a été créée avec succès.';
 $lang['hr_leaves_create_flash_msg_error'] = 'La demande d\'absence a été créée ou modifiée avec succès, mais vous n\'avez pas de manager.';
+$lang['hr_leaves_flash_spn_list_days_off'] = '%s jours non travaillés dans la période';
+$lang['hr_leaves_flash_msg_overlap_dayoff'] = 'Votre demande coïncide avec un jour non travaillé.';
+$lang['hr_leaves_validate_mandatory_js_msg'] = '"Le champ " + fieldname + " est obligatoire."';
+$lang['hr_leaves_validate_flash_msg_no_contract'] = 'Il semble que vous n\'ayez pas de contrat. Veuillez contacter un responsable des ressources humaines.';
+$lang['hr_leaves_validate_flash_msg_overlap_period'] = 'Vous ne pouvez pas créer une demande de congé pour deux périodes annuelles de congé. Veuillez créer deux demandes différentes.';
 
 $lang['hr_leaves_title'] = 'Liste des demandes de ';
 $lang['hr_leaves_html_title'] = 'Liste des demandes de congé de l\'employé n°';

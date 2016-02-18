@@ -25,6 +25,9 @@ $lang['hr_employees_thead_email'] = 'Ел. пошта';
 $lang['hr_employees_thead_entity'] = 'Відділ';
 $lang['hr_employees_thead_contract'] = 'Контракт';
 $lang['hr_employees_thead_manager'] = 'Керівник';
+$lang['hr_employees_thead_identifier'] = 'Ідентифікатор';
+$lang['hr_employees_thead_datehired'] = 'Дата прийому на роботу';
+$lang['hr_employees_thead_position'] = 'Посада';
 $lang['hr_employees_button_create_user'] = 'Створити';
 $lang['hr_employees_button_export'] = 'Експортувати список';
 $lang['hr_employees_popup_entitlment_title'] = 'Надані дні';
@@ -37,6 +40,22 @@ $lang['hr_employees_popup_entity_button_ok'] = 'ОК';
 $lang['hr_employees_popup_entity_button_cancel'] = 'Скасувати';
 $lang['hr_employees_description'] = 'Натисніть правою кнопкою мишки на працівнику щоб відкрити контекстне меню.';
 $lang['hr_employees_field_subdepts'] = 'Включаючи підвідділи';
+
+$lang['hr_employees_button_all'] = 'All';
+$lang['hr_employees_button_active'] = 'Active';
+$lang['hr_employees_button_inactive'] = 'Inactive';
+$lang['hr_employees_button_selection'] = 'Selection';
+$lang['hr_employees_button_select_all'] = 'Select all';
+$lang['hr_employees_button_deselect_all'] = 'Deselect all';
+$lang['hr_employees_button_select_manager'] = 'Select Manager';
+$lang['hr_employees_button_select_contract'] = 'Select Contract';
+$lang['hr_employees_button_select_entity'] = 'Select Entity';
+$lang['hr_employees_popup_contract_title'] = 'Select Contract';
+$lang['hr_employees_button_entitleddays'] = 'Entitled days';
+$lang['hr_employees_button_create_request'] = 'Submit a leave request';
+
+$lang['hr_employees_popup_manager_title'] = 'Select the manager';
+$lang['hr_employees_multiple_edit_selection_msg'] = 'You must select at least one employee into the table';
 
 $lang['hr_export_employees_title'] = 'Список працівників';
 $lang['hr_export_employees_thead_id'] = 'ID';
@@ -87,6 +106,11 @@ $lang['hr_leaves_create_button_create'] = 'Запит відпустки';
 $lang['hr_leaves_create_button_cancel'] = 'Скасувати';
 $lang['hr_leaves_create_flash_msg_success'] = 'Заява на відпустку успішно створена';
 $lang['hr_leaves_create_flash_msg_error'] = 'Заява на відпустку успішно створена або оновлена, але у вас немає керівника.';
+$lang['hr_leaves_flash_spn_list_days_off'] = '%s non-working days in the period';
+$lang['hr_leaves_flash_msg_overlap_dayoff'] = 'Your leave request matches with a non-working day.';
+$lang['hr_leaves_validate_mandatory_js_msg'] = '"Поле " + fieldname + " є обов\'язковим."';
+$lang['hr_leaves_validate_flash_msg_no_contract'] = 'Схоже не те, що у вас немає контракту. Зверніться до свого керівника.';
+$lang['hr_leaves_validate_flash_msg_overlap_period'] = 'Ви не можете створити заяву на відпустку для різних років. Будь ласка створіть дві окремі заяви на відпустку.';
 
 $lang['hr_overtime_title'] = 'Список заяв на понаднормові';
 $lang['hr_overtime_html_title'] = 'Список заяв на понаднормові для працівника №';

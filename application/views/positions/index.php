@@ -64,12 +64,12 @@
         <p><?php echo lang('positions_index_popup_confirm');?></p>
     </div>
     <div class="modal-footer">
-        <a href="#" id="lnkDeletePosition" class="btn danger"><?php echo lang('positions_index_popup_button_yes');?></a>
-        <a href="#" onclick="$('#frmDeletePosition').modal('hide');" class="btn secondary"><?php echo lang('positions_index_popup_button_no');?></a>
+        <a href="#" id="lnkDeletePosition" class="btn btn-danger"><?php echo lang('positions_index_popup_button_yes');?></a>
+        <a href="#" onclick="$('#frmDeletePosition').modal('hide');" class="btn"><?php echo lang('positions_index_popup_button_no');?></a>
     </div>
 </div>
 
-<link href="<?php echo base_url();?>assets/datatable/css/jquery.dataTables.css" rel="stylesheet">
+<link href="<?php echo base_url();?>assets/datatable/css/jquery.dataTables.min.css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo base_url();?>assets/datatable/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {

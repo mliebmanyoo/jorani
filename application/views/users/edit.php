@@ -132,8 +132,8 @@ echo $date->format(lang('global_date_format'));
         <img src="<?php echo base_url();?>assets/images/loading.gif">
     </div>
     <div class="modal-footer">
-        <a href="#" onclick="select_manager();" class="btn secondary"><?php echo lang('users_edit_popup_manager_button_ok');?></a>
-        <a href="#" onclick="$('#frmSelectManager').modal('hide');" class="btn secondary"><?php echo lang('users_edit_popup_manager_button_cancel');?></a>
+        <a href="#" onclick="select_manager();" class="btn"><?php echo lang('users_edit_popup_manager_button_ok');?></a>
+        <a href="#" onclick="$('#frmSelectManager').modal('hide');" class="btn"><?php echo lang('users_edit_popup_manager_button_cancel');?></a>
     </div>
 </div>
 
@@ -146,8 +146,8 @@ echo $date->format(lang('global_date_format'));
         <img src="<?php echo base_url();?>assets/images/loading.gif">
     </div>
     <div class="modal-footer">
-        <a href="#" onclick="select_entity();" class="btn secondary"><?php echo lang('users_edit_popup_entity_button_ok');?></a>
-        <a href="#" onclick="$('#frmSelectEntity').modal('hide');" class="btn secondary"><?php echo lang('users_edit_popup_entity_button_cancel');?></a>
+        <a href="#" onclick="select_entity();" class="btn"><?php echo lang('users_edit_popup_entity_button_ok');?></a>
+        <a href="#" onclick="$('#frmSelectEntity').modal('hide');" class="btn"><?php echo lang('users_edit_popup_entity_button_cancel');?></a>
     </div>
 </div>
 
@@ -160,8 +160,8 @@ echo $date->format(lang('global_date_format'));
         <img src="<?php echo base_url();?>assets/images/loading.gif">
     </div>
     <div class="modal-footer">
-        <a href="#" onclick="select_position();" class="btn secondary"><?php echo lang('users_edit_popup_position_button_ok');?></a>
-        <a href="#" onclick="$('#frmSelectPosition').modal('hide');" class="btn secondary"><?php echo lang('users_edit_popup_position_button_cancel');?></a>
+        <a href="#" onclick="select_position();" class="btn"><?php echo lang('users_edit_popup_position_button_ok');?></a>
+        <a href="#" onclick="$('#frmSelectPosition').modal('hide');" class="btn"><?php echo lang('users_edit_popup_position_button_cancel');?></a>
     </div>
 </div>
 
@@ -177,11 +177,13 @@ if ($language_code != 'en') { ?>
     
     //Popup select postion: on click OK, find the user id for the selected line
     function select_manager() {
-        var manager = $('#employees .row_selected td:first').text();
-        var text = $('#employees .row_selected td:eq(1)').text();
-        text += ' ' + $('#employees .row_selected td:eq(2)').text();
-        $('#manager').val(manager);
-        $('#txtManager').val(text);
+        var employees = $('#employees').DataTable();
+        if ( employees.rows({ selected: true }).any() ) {
+            var manager = employees.rows({selected: true}).data()[0][0];
+            var text = employees.rows({selected: true}).data()[0][1] + ' ' + employees.rows({selected: true}).data()[0][2];
+            $('#manager').val(manager);
+            $('#txtManager').val(text);
+        }
         $("#frmSelectManager").modal('hide');
     }
     
@@ -196,10 +198,13 @@ if ($language_code != 'en') { ?>
     
     //Popup select postion: on click OK, find the position id for the selected line
     function select_position() {
-        var position = $('#positions .row_selected td:first').text();
-        var text = $('#positions .row_selected td:eq(1)').text();
-        $('#position').val(position);
-        $('#txtPosition').val(text);
+        var positions = $('#positions').DataTable();
+        if ( positions.rows({ selected: true }).any() ) {
+            var position = positions.rows({selected: true}).data()[0][0];
+            var text = positions.rows({selected: true}).data()[0][1];
+            $('#position').val(position);
+            $('#txtPosition').val(text);
+        }
         $("#frmSelectPosition").modal('hide');
     }
 

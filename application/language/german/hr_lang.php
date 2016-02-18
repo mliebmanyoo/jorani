@@ -25,6 +25,9 @@ $lang['hr_employees_thead_email'] = 'E-Mail';
 $lang['hr_employees_thead_entity'] = 'Einheit';
 $lang['hr_employees_thead_contract'] = 'Vertrag';
 $lang['hr_employees_thead_manager'] = 'Vorgesetzter';
+$lang['hr_employees_thead_identifier'] = 'Identifikator';
+$lang['hr_employees_thead_datehired'] = 'Anstellungsdatum';
+$lang['hr_employees_thead_position'] = 'Position';
 $lang['hr_employees_button_create_user'] = 'Erstellen';
 $lang['hr_employees_button_export'] = 'Diese Liste exportieren';
 $lang['hr_employees_popup_entitlment_title'] = 'Bezugsberechtigte Tage';
@@ -37,6 +40,22 @@ $lang['hr_employees_popup_entity_button_ok'] = 'OK';
 $lang['hr_employees_popup_entity_button_cancel'] = 'Abbrechen';
 $lang['hr_employees_description'] = 'Rechtsklick auf einen Mitarbeiter für Kontextmenü.';
 $lang['hr_employees_field_subdepts'] = 'Unterabteilungen inkludieren';
+
+$lang['hr_employees_button_all'] = 'All';
+$lang['hr_employees_button_active'] = 'Active';
+$lang['hr_employees_button_inactive'] = 'Inactive';
+$lang['hr_employees_button_selection'] = 'Selection';
+$lang['hr_employees_button_select_all'] = 'Select all';
+$lang['hr_employees_button_deselect_all'] = 'Deselect all';
+$lang['hr_employees_button_select_manager'] = 'Select Manager';
+$lang['hr_employees_button_select_contract'] = 'Select Contract';
+$lang['hr_employees_button_select_entity'] = 'Select Entity';
+$lang['hr_employees_popup_contract_title'] = 'Select Contract';
+$lang['hr_employees_button_entitleddays'] = 'Entitled days';
+$lang['hr_employees_button_create_request'] = 'Submit a leave request';
+
+$lang['hr_employees_popup_manager_title'] = 'Select the manager';
+$lang['hr_employees_multiple_edit_selection_msg'] = 'You must select at least one employee into the table';
 
 $lang['hr_export_employees_title'] = 'Liste der Angestellten';
 $lang['hr_export_employees_thead_id'] = 'ID';
@@ -88,6 +107,11 @@ $lang['hr_leaves_create_button_create'] = 'Urlaubsanfrage';
 $lang['hr_leaves_create_button_cancel'] = 'Abbrechen';
 $lang['hr_leaves_create_flash_msg_success'] = 'Urlaubsanfrage erfolgreich erstellt';
 $lang['hr_leaves_create_flash_msg_error'] = 'Urlaubsanfrage erfolgreich erstellt, Sie haben jedoch keinen eingetragenen Vorgesetzten.';
+$lang['hr_leaves_flash_spn_list_days_off'] = '%s non-working days in the period';
+$lang['hr_leaves_flash_msg_overlap_dayoff'] = 'Your leave request matches with a non-working day.';
+$lang['hr_leaves_validate_mandatory_js_msg'] = '"Das Feld " + fieldname + " ist zwingend erforderlich."';
+$lang['hr_leaves_validate_flash_msg_no_contract'] = 'Es scheint als hätten Sie keinen Vertrag. Bitte kontaktieren Sie Ihre Personalabteilung oder Ihren Vorgesetzten.';
+$lang['hr_leaves_validate_flash_msg_overlap_period'] = 'Sie können einen Urlaubsantrag für zwei jährliche Urlaubszeiten nicht zu schaffen. Bitte erstellen Sie zwei verschiedene Urlaubsanträge.';
 
 $lang['hr_overtime_title'] = 'Liste der Überstundenanfragen';
 $lang['hr_overtime_html_title'] = 'Liste der Überstundenanfragen für Angestellten #';

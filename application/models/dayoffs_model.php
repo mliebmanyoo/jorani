@@ -155,7 +155,7 @@ class Dayoffs_model extends CI_Model {
      * @param int $contract contract identifier
      * @param date $start start date
      * @param date $end end date
-     * @return int number of day offs
+     * @return int number of days off
      */
     public function lengthDaysOffBetweenDates($contract, $start, $end) {
         $this->db->select('sum(CASE `type` WHEN 1 THEN 1 WHEN 2 THEN 0.5 WHEN 3 THEN 0.5 END) as days');
@@ -165,6 +165,48 @@ class Dayoffs_model extends CI_Model {
         $this->db->from('dayoffs');
         $result = $this->db->get()->result_array();
         return is_null($result[0]['days'])?0:$result[0]['days']; 
+    }
+
+    /**
+     * Get the list of days off between two dates for a given contract (contract of the employee)
+     * @param int $employee employee identifier
+     * @param date $start start date
+     * @param date $end end date
+     * @return array list of days off
+     */
+    public function listOfDaysOffBetweenDates($employee, $start, $end) {
+        $this->lang->load('calendar', $this->session->userdata('language'));
+        $this->db->select('dayoffs.*');
+        $this->db->join('dayoffs', 'users.contract = dayoffs.contract');
+        $this->db->where('users.id', $employee);
+        $this->db->where('date >=', $start);
+        $this->db->where('date <=', $end);
+        $events = $this->db->get('users')->result();
+        $listOfDaysOff = array();
+        foreach ($events as $entry) {
+            switch ($entry->type)
+            {
+                case 1://1 : All day
+                    $title = $entry->title;
+                    $length = 1;
+                    break;
+                case 2://2 : Morning
+                    $title = lang('Morning') . ': ' . $entry->title;
+                    $length = 0.5;
+                    break;
+                case 3://3 : Afternnon
+                    $title = lang('Afternoon') . ': ' . $entry->title;
+                    $length = 0.5;
+                    break;
+            }
+            $listOfDaysOff[] = array(
+                'title' => $title,                                  //Title of Day off
+                'date' => $entry->date,                      //Date of day off
+                'type' => $entry->type,                      //1:All day, 2:Morning, 3:Afternoon
+                'length' => $length                            //1 or 0.5 depending on the type (for sum)
+            );
+        }
+        return $listOfDaysOff;
     }
     
     /**
